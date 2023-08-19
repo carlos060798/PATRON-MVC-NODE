@@ -46,4 +46,4 @@ const TracksScheme = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("tracks", TracksScheme);
+export default mongoose.model("Tracks", TracksScheme);
