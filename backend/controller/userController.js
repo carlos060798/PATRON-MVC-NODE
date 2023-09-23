@@ -4,8 +4,43 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import generarToken from "../services/jwt.js";
 const getUsers = async (req, res) => {
-  res.json({ message: "get users" , user: req.user
-});
+  const defaultPage = 1;
+  const page = req.params.page ? parseInt(req.params.page) : defaultPage;
+  let itemsPerPage = 2;
+ 
+  const options = {
+    page: page,
+    limit: itemsPerPage,
+    sort: { _id: -1 },
+    collation: {
+      locale: "en",
+    },
+  };
+ 
+  try{
+    const users = await User.paginate({},options)
+    if(!users)
+      return res.status(404).json({
+        status: "Error",
+        message: "No se han encontrado usuarios",
+      });
+    
+      return res.status(200).send({
+        status: "success",
+        message: "listado de usuarios",
+        users: users.docs,
+        page,
+        itemsPerPage,
+      });
+  }catch (error){
+    return res.status(404).json({
+      status: "Error",
+      message: "Hubo un error al obtener los usuarios",
+      error: error.message,
+    });
+  }
+  
+
 };
 const RegisterUser = async (req, res) => {
     try {
@@ -83,7 +118,27 @@ const loginUser = async (req, res) => {
       }
 }
 
+
+ const profileUser = async (req, res) => {
+   // Recoger el id de la url
+   const id = req.params.id;
+
+   // Consulta para sacar los datos del usuario
+   const userProfile = await User.findById(id).select({ password: 0, role: 0 });
+   if (!userProfile) {
+     return res.status(404).send({
+       status: "error",
+       message: "El usuario no existe o hay un error",
+     });
+   }
+
+   // Devolver el resultado
+   return res.status(200).send({
+     status: "success",
+     user: userProfile,
+   });
+ };
   
 
 
-export { getUsers, RegisterUser,loginUser };
+export { getUsers, RegisterUser,loginUser,profileUser };
