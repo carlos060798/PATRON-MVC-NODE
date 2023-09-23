@@ -2,9 +2,10 @@
 
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
-
+import generarToken from "../services/jwt.js";
 const getUsers = async (req, res) => {
-  res.json({ message: "get users" });
+  res.json({ message: "get users" , user: req.user
+});
 };
 const RegisterUser = async (req, res) => {
     try {
@@ -64,7 +65,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({message: "no te has identificado correctamente"}) 
         }
         // crear token
-        const token = false
+        const token = generarToken(userexist);
         // devolver respuesta
 
         return res.status(200).json({
