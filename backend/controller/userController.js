@@ -3,45 +3,52 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import generarToken from "../services/jwt.js";
+import mongoosePaginate from "mongoose-paginate-v2"
+  
+
 const getUsers = async (req, res) => {
-  const defaultPage = 1;
-  const page = req.params.page ? parseInt(req.params.page) : defaultPage;
-  let itemsPerPage = 2;
- 
-  const options = {
-    page: page,
-    limit: itemsPerPage,
-    sort: { _id: -1 },
-    collation: {
-      locale: "en",
-    },
-  };
- 
-  try{
-    const users = await User.paginate({},options)
-    if(!users)
+  try {
+    const defaultPage = 1;
+    const page = req.params.page ? parseInt(req.params.page) : defaultPage;
+    const itemsPerPage = 5;
+
+    const options = {
+      page,
+      limit: itemsPerPage,
+      sort: { _id: -1 },
+      collation: {
+        locale: "en",
+      },
+    };
+
+    const users = await User.paginate({}, options);
+
+    if (users.docs.length === 0) {
       return res.status(404).json({
         status: "Error",
         message: "No se han encontrado usuarios",
       });
-    
-      return res.status(200).send({
-        status: "success",
-        message: "listado de usuarios",
-        users: users.docs,
-        page,
-        itemsPerPage,
-      });
-  }catch (error){
-    return res.status(404).json({
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "Listado de usuarios",
+      users: users.docs,
+      page,
+      itemsPerPage,
+      totalUsers: users.totalDocs, // Agregar el total de usuarios
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
       status: "Error",
       message: "Hubo un error al obtener los usuarios",
       error: error.message,
     });
   }
-  
-
 };
+
+
 const RegisterUser = async (req, res) => {
     try {
       // Recoger datos de usuario

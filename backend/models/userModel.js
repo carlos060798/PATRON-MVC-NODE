@@ -1,4 +1,5 @@
 import moongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const userSchema = new moongoose.Schema({
     name: {
@@ -36,4 +37,5 @@ const userSchema = new moongoose.Schema({
   
 });
 
+userSchema.plugin(mongoosePaginate); // linea nesesaria para la paginacion de los usuarios
 export default moongoose.model('User', userSchema);
