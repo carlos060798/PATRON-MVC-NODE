@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import generarToken from "../services/jwt.js";
 import mongoosePaginate from "mongoose-paginate-v2"
   
-
+// controldor de usuarios
 const getUsers = async (req, res) => {
   try {
     const defaultPage = 1;
@@ -48,7 +48,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-
+// crud de usuario
 const RegisterUser = async (req, res) => {
     try {
       // Recoger datos de usuario
@@ -86,6 +86,53 @@ const RegisterUser = async (req, res) => {
       return res.status(500).json({ message: "Error al guardar el usuario", error: error.message });
     }
 }; 
+
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const {  password, ...resto } = req.body;
+
+  try {
+    // Si se proporciona un nuevo correo electrónico
+    if (resto.email) {
+      // Verificar si el nuevo email ya está registrado en otro usuario
+      const existingUser = await User.findOne({ email:resto.email });
+      if (existingUser && existingUser._id.toString() !== id) {
+        return res.status(400).json({
+          msg: "El correo electrónico ya está registrado en otro usuario",
+        });
+      }
+    }
+
+    // Hash de la contraseña si se proporcionó una nueva contraseña
+    if (password) {
+      const salt = bcrypt.genSaltSync();
+      resto.password = bcrypt.hashSync(password, salt);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, resto, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        msg: "Usuario no encontrado",
+      });
+    }
+
+    res.status(200).json({
+      msg: "Usuario modificado correctamente",
+      updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Error al modificar el usuario",
+      error,
+    });
+  }
+};
+
+
+
+
+// login de usuario
 
 const loginUser = async (req, res) => {
     // recoger datos
@@ -148,4 +195,4 @@ const loginUser = async (req, res) => {
   
 
 
-export { getUsers, RegisterUser,loginUser,profileUser };
+export { getUsers, RegisterUser,loginUser,profileUser,updateUser };
