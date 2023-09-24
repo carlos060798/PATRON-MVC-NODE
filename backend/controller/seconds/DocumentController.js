@@ -1,6 +1,7 @@
 // controladores de cargar documentos
 import fs from "fs";
 import User from "../../models/userModel.js";
+import path from "path";
 
 const uploadUserImage = async (req, res) => {
     try {
@@ -49,7 +50,27 @@ const uploadUserImage = async (req, res) => {
   
   }
 const viuwImage = async (req, res) => {
-   res.json({message:"hola mundo"})
+
+  // sacar parametros de la url
+
+const {file} = req.params; // sacar el nombre del fichero
+
+
+  // montar el path donde esta el fichero
+
+const pathFile = `./uploads/users/${file}`; // ruta del fichero
+
+  // comprobar si existe el fichero
+
+const pathExists = fs.existsSync(pathFile); // comprobar si el fichero existe
+
+ if (!pathExists) { // si no existe el fichero
+   return res.status(404).json({message:"no existe la imagen"});} // devolver mensaje de error 
+  // devolver la imagen
+  
+  return  res.sendFile( path.resolve(pathFile)      ); // devolver la imagen
+  
+
 }
 
 export { uploadUserImage, viuwImage };

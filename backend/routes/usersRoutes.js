@@ -17,7 +17,7 @@ router.get('/list/:page', auth, getUsers);
 router.post('/', RegisterUser);
 router.put('/update/:id', auth, updateUser);
 // rutas de archivos
-router.get('/upload/:id', auth, viuwImage);
+router.get('/avatar/:file', auth, viuwImage);
 router.post('/upload', [auth, uploads.single("file0")], uploadUserImage);
 // rutas de login
 
