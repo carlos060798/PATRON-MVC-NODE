@@ -1,45 +1,38 @@
 //  middleware  para   sacar los id de los usuarios apra tratar la informacion
 import Follow from "../models/followModel.js";
 
-const followUserIds = async (identityuserId) => { // funcion para verficar que usuarios sigo y cuales me siguen 
- // sacar la informacion de seguidos y mis seguidores
-    let following = await Follow.find({ user: identityuserId }).select({ followed:1 ,_id:0}).exec()
+// Función para obtener los IDs de los usuarios seguidos y seguidores
+const followUserIds = async (identityUserId) => {
+    // Sacar la información de los usuarios seguidos y seguidores
+    let following = await Follow.find({ user: identityUserId }).select({ followed: 1, _id: 0 }).exec();
+    let followers = await Follow.find({ followed: identityUserId }).select({ user: 1, _id: 0 }).exec();
 
-    let followers = await Follow.find({ followed: identityuserId }).select({ user:1 ,_id:0}).exec()
-  // limpiar informacion con numero solamente
-  let followingclean=[]
+    // Limpiar la información para obtener solo los IDs
+    let followingIds = [];
+    following.forEach((follow) => {
+        followingIds.push(follow.followed);
+    });
 
-    following.forEach((follow)=>{
-        followingclean.push(follow.followed)
-    })
-  
-    let followersclean=[]
-    followers.forEach((follow)=>{
-        followersclean.push(follow.user)
-    })
+    let followersIds = [];
+    followers.forEach((follow) => {
+        followersIds.push(follow.user);
+    });
 
-  return  {
-        following: followingclean,
-        followers: followersclean
+    return {
+        following: followingIds,
+        followers: followersIds
     };
-  }
+}
 
+// Función para obtener la información de si un usuario sigue a otro
+const FollowthisUser = async (identityUserId, profileUserId) => {
+    // Sacar la información de si el usuario sigue al perfil y viceversa
+    let following = await Follow.findOne({ user: identityUserId, followed: profileUserId });
+    let followers = await Follow.findOne({ user: profileUserId, followed: identityUserId });
 
-
-
-const FollowthisUser = async (identityuserId,profaileUserId) => { // funcion para sacar la informacion de los usuarios que me siguen
-     console.log({
-        identityuserId,
-        profaileUserId
-     })
-    // sacar la informacion de seguidos y mis seguidores
-    let following = await Follow.findOne({ user: identityuserId, followed:profaileUserId })
-
-    let followers = await Follow.findOne({ user : profaileUserId,  followed: identityuserId })
-   
-    return  {
-    following,
-    followers
+    return {
+        following,
+        followers
     };
 }
 

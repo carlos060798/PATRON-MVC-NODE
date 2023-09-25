@@ -1,12 +1,93 @@
-// controladores de usuarios
-
+/**
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Nombre del usuario.
+ *         nick:
+ *           type: string
+ *           description: Nickname del usuario.
+ *         email:
+ *           type: string
+ *           description: Correo electrónico del usuario.
+ *         password:
+ *           type: string
+ *           description: Contraseña del usuario.
+ *         createdAt:
+ *           type: string
+ *           description: Fecha de creación del usuario.
+ *
+ * /api/users:
+ *   get:
+ *     summary: Obtiene una lista de usuarios.
+ *     description: Obtiene una lista de usuarios paginada.
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         description: Número de página para la paginación.
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios obtenida con éxito.
+ *       404:
+ *         description: No se han encontrado usuarios.
+ *       500:
+ *         description: Error en el servidor.
+ *
+ *   post:
+ *     summary: Registra un nuevo usuario.
+ *     description: Registra un nuevo usuario en el sistema.
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         description: Datos del usuario a registrar.
+ *         required: true
+ *         schema:
+ *           $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Usuario registrado con éxito.
+ *       400:
+ *         description: Error en los datos de entrada.
+ *       500:
+ *         description: Error en el servidor.
+ *
+ * /api/users/{id}:
+ *   put:
+ *     summary: Actualiza un usuario.
+ *     description: Actualiza un usuario por ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: ID del usuario a actualizar.
+ *         required: true
+ *         type: string
+ *       - name: body
+ *         in: body
+ *         description: Datos del usuario a actualizar.
+ *         required: true
+ *         schema:
+ *           $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado con éxito.
+ *       400:
+ *         description: Error en los datos de entrada.
+ *       404:
+ *         description: Usuario no encontrado.
+ *       500:
+ *         description: Error en el servidor.
+ */
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import generarToken from "../services/jwt.js";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { followUserIds } from "../services/followuserId.js";
 
-// controldor de usuarios
+// Obtiene una lista de usuarios paginada
 const getUsers = async (req, res) => {
   try {
     const defaultPage = 1;
@@ -31,9 +112,8 @@ const getUsers = async (req, res) => {
       });
     }
 
-    // sacar un listado de usuarios que me siguen y que yo sigo
-    let   user_followings=  followUserIds(req.user.id);
-
+    // Obtiene la lista de usuarios que sigues y los que te siguen
+    let user_followings = followUserIds(req.user.id);
 
     return res.status(200).json({
       status: "success",
@@ -55,10 +135,10 @@ const getUsers = async (req, res) => {
   }
 };
 
-// crud de usuario
+// Registra un nuevo usuario en el sistema
 const RegisterUser = async (req, res) => {
   try {
-    // Recoger datos de usuario
+    // Recoger datos del usuario
     const params = req.body;
 
     // Validar datos
@@ -94,6 +174,7 @@ const RegisterUser = async (req, res) => {
   }
 };
 
+// Actualiza un usuario por ID
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const { password, ...resto } = req.body;
@@ -136,6 +217,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-
-
 export { getUsers, RegisterUser, updateUser };
+
+
