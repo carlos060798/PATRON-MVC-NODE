@@ -27,9 +27,20 @@ const followUserIds = async (identityuserId) => { // funcion para verficar que u
 
 
 
-const FollowthisUser = async (identityId,profaileUserId) => {
-   
+const FollowthisUser = async (identityuserId,profaileUserId) => { // funcion para sacar la informacion de los usuarios que me siguen
+     console.log({
+        identityuserId,
+        profaileUserId
+     })
+    // sacar la informacion de seguidos y mis seguidores
+    let following = await Follow.findOne({ user: identityuserId, followed:profaileUserId })
 
+    let followers = await Follow.findOne({ user : profaileUserId,  followed: identityuserId })
+   
+    return  {
+    following,
+    followers
+    };
 }
 
 export {

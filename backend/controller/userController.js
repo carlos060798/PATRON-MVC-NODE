@@ -4,6 +4,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import generarToken from "../services/jwt.js";
 import mongoosePaginate from "mongoose-paginate-v2";
+import { followUserIds } from "../services/followuserId.js";
 
 // controldor de usuarios
 const getUsers = async (req, res) => {
@@ -30,6 +31,10 @@ const getUsers = async (req, res) => {
       });
     }
 
+    // sacar un listado de usuarios que me siguen y que yo sigo
+    let   user_followings=  followUserIds(req.user.id);
+
+
     return res.status(200).json({
       status: "success",
       message: "Listado de usuarios",
@@ -37,6 +42,8 @@ const getUsers = async (req, res) => {
       page,
       itemsPerPage,
       totalUsers: users.totalDocs, // Agregar el total de usuarios
+      userfollowings: (await user_followings).following,
+      userfollowingsme: (await user_followings).followers
     });
   } catch (error) {
     console.error(error);

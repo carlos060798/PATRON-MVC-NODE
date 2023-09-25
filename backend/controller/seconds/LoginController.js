@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import generarToken from "../../services/jwt.js";
 import User from"../../models/userModel.js";
-
+import { FollowthisUser } from "../../services/followuserId.js";
 
 const loginUser = async (req, res) => {
     // recoger datos
@@ -53,11 +53,19 @@ const loginUser = async (req, res) => {
         message: "El usuario no existe o hay un error",
       });
     }
-  
+  //retornar los perfiles de users seguidos y seguidores
+  const followinfo = await FollowthisUser(req.user.id,id) 
+
+
+    
     // Devolver el resultado
+
+
     return res.status(200).send({
       status: "success",
       user: userProfile,
+      Profilefollowings:  followinfo.following,
+      Profilefollowingsme:  followinfo.followers
     });
   };
 

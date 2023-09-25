@@ -43,9 +43,6 @@ const createFollow = async (req, res) => {
         });
     }
 };
-
-
-
 // listar  usuarios seguidos por cualquier usuario 
 const getFollowing = async (req, res) => {
     try {
@@ -105,19 +102,60 @@ const getFollowing = async (req, res) => {
 
 // listar  usuarios que siguen a cualquier usuario
 const getFollowers = async (req, res) => {
+    try {
+        // Obtener el ID del usuario actual
+        let userId = req.user.id;
+        
+        // Comprobar si llega un ID de usuario diferente por la URL
+        if (req.params.id) userId = req.params.id;
+        
+        // Comprobar si llega la página por la URL, si no, por defecto es 1
+        let page = 1;
+        if (req.params.page) page = req.params.page;
+        
+        const itemsPerPage = 5;
 
+        // Aplicar la paginación utilizando mongoose-paginate-v2 y mantener la población
+        const options = {
+            page: page,
+            limit: itemsPerPage,
+            customLabels: {
+                totalDocs: 'totalUsers',
+                docs: 'users'
+            },
+            populate: [
+                {
+                    path: 'user',
+                    select: '-password -role -__v -email'
+                },
+                {
+                    path: 'followed',
+                    select: '-password -role -__v -email'
+                }
+            ]
+        };
 
-    // sacar id de usuario identificado
+        const followings = await Follow.paginate({ followed: userId }, options); 
 
+        // sacar una lista de usuarios seguidos y los que  me siguen
+        let   user_followings=  followUserIds(req.user.id);
+        res.json({
+            message: "Usuarios que me siguen",
+            totalUsers: followings.totalUsers,
+            totalPages: followings.totalPages,
+            currentPage: followings.page,
+            users: followings.users,
+            userfollowings: (await user_followings).following,
+            userfollowingsme: (await user_followings).followers
 
+        
+        });
 
-
-
-    res.json({ message: "get followers users" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error en el servidor", error });
+    }
 };
-
-
-
 
 // eliminar follow
 const deleteFollow = async (req, res) => {
