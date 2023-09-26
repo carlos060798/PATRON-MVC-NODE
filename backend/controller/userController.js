@@ -98,6 +98,7 @@ const getUsers = async (req, res) => {
       page,
       limit: itemsPerPage,
       sort: { _id: -1 },
+      select: '-email -password -role -__v', // Excluye los campos especificados
       collation: {
         locale: "en",
       },

@@ -103,6 +103,7 @@ const uploadUserPublication = async (req, res) => {
     res.status(200).json({
       msg: "Imagen subida correctamente",
       user: req.user,
+      Publication: userSavePublication,
       file: req.file,
       files: req.files
 
@@ -113,8 +114,27 @@ const uploadUserPublication = async (req, res) => {
     return res.status(500).json({ message: "Error al guardar el usuario", error: error.message });
   }
 }
+
+const viewPublication= async (req, res) => {
+  // Sacar parámetros de la URL
+  const { file } = req.params; // Sacar el nombre del fichero
+  
+  // Montar el path donde está el fichero
+  const pathFile = `./uploads/publication/${file}`; // Ruta del fichero
+  
+  // Comprobar si existe el fichero
+  const pathExists = fs.existsSync(pathFile); // Comprobar si el fichero existe
+  
+  if (!pathExists) { // Si no existe el fichero
+    return res.status(404).json({ message: "No existe la imagen" }); // Devolver mensaje de error 
+  }
+  
+  // Devolver la imagen
+  return res.sendFile(path.resolve(pathFile)); // Devolver la imagen
+  }
 export {
   uploadUserImage,
   viewImage,
-  uploadUserPublication
+  uploadUserPublication,
+  viewPublication
 }

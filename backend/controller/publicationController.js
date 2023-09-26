@@ -2,6 +2,8 @@
 
 import Publication from "../models/publicationModel.js";
 import mongoosePaginate from 'mongoose-paginate-v2';
+import { followUserIds } from "../services/followuserId.js";
+
 
 
 // crear el publicacion
@@ -146,15 +148,91 @@ const deletePublic = async (req, res) => {
 };
 
 
+// feed de las publicaciones
 
-const getPublicId = async (req, res) => {
-    res.json({ message: "get public " });
+const publicFeed = async (req, res) => {
+     // Sacar la pagina actual
+     let page = 1;
+
+     if (req.params.page) {
+         page = req.params.page;
+     }
+ 
+     // Establecer numero de elementos por pagina
+     const itemsPerPage = 5;
+ 
+     // Sacar un array de identificadores de usuarios que yo sigo como usuario logueado
+     try {
+         const myFollows = await followUserIds(req.user.id);
+ 
+         // Find a publicaciones in, ordenar, popular, paginar
+         const query = Publication.find({ user: { $in: myFollows.following } })
+             .populate("user", "-password -role -__v -email")
+             .sort("-created_at");
+ 
+         const options = {
+             page: page,
+             limit: itemsPerPage,
+         };
+ 
+         const publications = await Publication.paginate(query, options);
+ 
+         if (!publications || publications.docs.length === 0) {
+             return res.status(500).send({
+                 status: "error",
+                 message: "No hay publicaciones para mostrar",
+             });
+         }
+ 
+         return res.status(200).send({
+             status: "success",
+             message: "Feed de publicaciones",
+             following: myFollows.following,
+             total: publications.totalDocs,
+             page: publications.page,
+             pages: publications.totalPages,
+             publications: publications.docs,
+         });
+     } catch (error) {
+         return res.status(500).send({
+             status: "error",
+             error,
+             message: "Error al obtener usuarios que sigues",
+         });
+     }
+/*
+    try{
+    // sacar  la pagina actual
+    let page = 1;
+    if (req.params.page) page = parseInt(req.params.page);
+
+    //  sacar un array de los usuarios identificados ques Sigo
+  let itemsPerPage = 5;
+     const myfollows = await followUserIds(req.user.id);
+
+    //  encontrar su publicaciones
+const publicationFollowing = await  Publication.find({user:{$in:myfollows.following}})
+
+    // usuarios
+
+    return res.json({
+        message: "feed de publicaciones",
+        myfollowstatus: myfollows.following,
+        publicationFollowing
+
+    })
+
+
+    } catch(err){
+        console.log(err);
+        return res.status(500).json({ message: "Error al obtener el feed", err });
+    }*/
 };
 
 export {
     createPublic,
     getpublicUserMe,
     deletePublic,
-    getPublicId,
+    publicFeed,
     getPublicdtail,
 };

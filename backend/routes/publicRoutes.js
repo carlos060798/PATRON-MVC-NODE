@@ -4,11 +4,12 @@ import {
     getPublicdtail,
     deletePublic,
     getpublicUserMe,
+    publicFeed
 } from '../controller/publicationController.js';
 import { Router } from 'express';
 import auth from '../middlewares/auth.js';
-import multer from 'multer';
-import { uploadUserPublication } from '../controller/seconds/DocumentController.js';
+import multer from 'multer'; 
+import { uploadUserPublication,  viewPublication} from '../controller/seconds/DocumentController.js';
 
 // configuracion de la subida de archivos
 
@@ -28,6 +29,8 @@ const router = Router();
 router.post('/save',auth,createPublic);
 router.get('/detail/:id',auth,getPublicdtail);
 router.get('/user/:id/:page?',auth,getpublicUserMe);
+router.get('/publication/:file',auth,viewPublication);
+router.get('/feed/:page?',auth,publicFeed);
 router.delete('/delete/:id',deletePublic);
 router.post('/upload/:id',[auth,uploads.single("file0")],uploadUserPublication);
 
