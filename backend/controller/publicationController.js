@@ -144,7 +144,8 @@ const deletePublic = async (req, res) => {
     }
 
 };
-// obtener publicacion por id
+
+
 
 const getPublicId = async (req, res) => {
     res.json({ message: "get public " });
