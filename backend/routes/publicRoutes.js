@@ -29,7 +29,7 @@ const router = Router();
 router.post('/save',auth,createPublic);
 router.get('/detail/:id',auth,getPublicdtail);
 router.get('/user/:id/:page?',auth,getpublicUserMe);
-router.get('/publication/:file',auth,viewPublication);
+router.get('/publication/:file',viewPublication);
 router.get('/feed/:page?',auth,publicFeed);
 router.delete('/delete/:id',deletePublic);
 router.post('/upload/:id',[auth,uploads.single("file0")],uploadUserPublication);

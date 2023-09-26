@@ -85,6 +85,8 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import generarToken from "../services/jwt.js";
 import mongoosePaginate from "mongoose-paginate-v2";
+import Follow from "../models/followModel.js";
+import Publication from "../models/publicationModel.js";
 import { followUserIds } from "../services/followuserId.js";
 
 // Obtiene una lista de usuarios paginada
@@ -196,7 +198,8 @@ const updateUser = async (req, res) => {
     if (password) {
       const salt = bcrypt.genSaltSync();
       resto.password = bcrypt.hashSync(password, salt);
-    }
+    }else{
+      delete resto.password;    }
 
     const updatedUser = await User.findByIdAndUpdate(id, resto, { new: true });
 
@@ -218,6 +221,43 @@ const updateUser = async (req, res) => {
   }
 };
 
-export { getUsers, RegisterUser, updateUser };
+const counterUsers = async (req, res) => {
+  let userId = req.user.id;
+
+  if (req.params.id) {
+      userId = req.params.id;
+  }
+
+  try {
+      const following = await Follow.count({ "user": userId });
+
+      const followed = await Follow.count({ "followed": userId });
+
+      const publications = await Publication.count({ "user": userId });
+
+      return res.status(200).send({
+          userId,
+          following: following,
+          followed: followed,
+          publications: publications
+      });
+  } catch (error) {
+      return res.status(500).send({
+          status: "error",
+          message: "Error en los contadores",
+          error
+      });
+  }
+  }
+
+
+
+
+
+
+
+
+
+export { getUsers, RegisterUser, updateUser,counterUsers };
 
 

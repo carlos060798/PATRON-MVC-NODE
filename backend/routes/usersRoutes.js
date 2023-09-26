@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RegisterUser, getUsers, updateUser } from '../controller/userController.js';
+import { RegisterUser, counterUsers, getUsers, updateUser } from '../controller/userController.js';
 import { loginUser, profileUser } from '../controller/seconds/LoginController.js';
 import auth from '../middlewares/auth.js';
 import uploads from '../middlewares/multerConfig.js';
@@ -17,7 +17,7 @@ router.post('/', RegisterUser);
 router.put('/update/:id', auth, updateUser);
 
 // Rutas para ver la imagen de usuario (avatar)
-router.get('/avatar/:file',auth,viewImage);
+router.get('/avatar/:file',viewImage);
 
 // Rutas para subir una imagen de usuario
 router.post('/upload', [auth, uploads.single("file0")],uploadUserImage);
@@ -27,6 +27,9 @@ router.get('/profile/:id', auth, profileUser);
 
 // Ruta para iniciar sesión de usuario
 router.post('/login', loginUser);
+
+// contador de seguidores y seguidos
+router.get('/counter/:id',auth,counterUsers);
 
 const userRoutes = router;
 
