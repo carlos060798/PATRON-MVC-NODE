@@ -1,164 +1,45 @@
-function FeedPage() {
-    return (<>
-       <section class="layout__content">
+import React, { useState } from 'react';
 
-<header class="content__header">
-    <h1 class="content__title">Timeline</h1>
-    <button class="content__button">Mostrar nuevas</button>
-</header>
+function  FeedPage() {
+  const [tweets, setTweets] = useState([
+    {
+      id: 1,
+      username: 'Usuario1',
+      time: 'Hace 1 hora',
+      text: 'Este es un tweet de ejemplo 1.',
+    },
+    {
+      id: 2,
+      username: 'Usuario2',
+      time: 'Hace 2 horas',
+      text: 'Este es un tweet de ejemplo 2.',
+    },
+  ]);
 
-<div class="content__posts">
+  const handleDeleteTweet = (id) => {
+    const updatedTweets = tweets.filter((tweet) => tweet.id !== id);
+    setTweets(updatedTweets);
+  };
 
-    <div class="posts__post">
-
-        <div class="post__container">
-
-            <div class="post__image-user">
-                <a href="#" class="post__image-link">
-                    <img src="assets/img/user.png" class="post__user-image" alt="Foto de perfil"/>
-                </a>
+  return (
+    <div className="container mt-4">
+      {tweets.map((tweet) => (
+        <div className="card mb-3" key={tweet.id}>
+          <div className="card-body">
+            <div className="media">
+              <img src="imagen_usuario.jpg" className="mr-3 rounded-circle" alt="Imagen de Usuario" width="64" height="64" />
+              <div className="media-body">
+                <h5 className="mt-0">{tweet.username}</h5>
+                <p className="text-muted">{tweet.time}</p>
+                <p>{tweet.text}</p>
+                <button type="button" className="btn btn-danger" onClick={() => handleDeleteTweet(tweet.id)}>Eliminar</button>
+              </div>
             </div>
-
-            <div class="post__body">
-
-                <div class="post__user-info">
-                    <a href="#" class="user-info__name">Victor Robles</a>
-                    <span class="user-info__divider"> | </span>
-                    <a href="#" class="user-info__create-date">Hace 1 hora</a>
-                </div>
-
-                <h4 class="post__content">Hola, buenos dias.</h4>
-
-            </div>
-
+          </div>
         </div>
-
-
-        <div class="post__buttons">
-
-            <a href="#" class="post__button">
-                <i class="fa-solid fa-trash-can"></i>
-            </a>
-
-        </div>
-
+      ))}
     </div>
-
-    <div class="posts__post">
-
-        <div class="post__container">
-
-            <div class="post__image-user">
-                <a href="#" class="post__image-link">
-                    <img src="assets/img/user.png" class="post__user-image" alt="Foto de perfil"/>
-                </a>
-            </div>
-
-            <div class="post__body">
-
-                <div class="post__user-info">
-                    <a href="#" class="user-info__name">Victor Robles</a>
-                    <span class="user-info__divider"> | </span>
-                    <a href="#" class="user-info__create-date">Hace 1 hora</a>
-                </div>
-
-                <h4 class="post__content">Hola, buenos dias.</h4>
-
-            </div>
-        </div>
-
-        <div class="post__buttons">
-
-            <a href="#" class="post__button">
-                <i class="fa-solid fa-trash-can"></i>
-            </a>
-
-        </div>
-
-    </div>
-
-    
-    <div class="posts__post">
-
-        <div class="post__container">
-
-            <div class="post__image-user">
-                <a href="#" class="post__image-link">
-                    <img src="assets/img/user.png" class="post__user-image" alt="Foto de perfil"/>
-                </a>
-            </div>
-
-            <div class="post__body">
-
-                <div class="post__user-info">
-                    <a href="#" class="user-info__name">Victor Robles</a>
-                    <span class="user-info__divider"> | </span>
-                    <a href="#" class="user-info__create-date">Hace 1 hora</a>
-                </div>
-
-                <h4 class="post__content">Hola, buenos dias.</h4>
-
-            </div>
-        </div>
-
-        <div class="post__buttons">
-
-            <a href="#" class="post__button">
-                <i class="fa-solid fa-trash-can"></i>
-            </a>
-
-        </div>
-
-    </div>
-
-
-
-    
-    <div class="posts__post">
-
-        <div class="post__container">
-
-            <div class="post__image-user">
-                <a href="#" class="post__image-link">
-                    <img src="assets/img/user.png" class="post__user-image" alt="Foto de perfil"/>
-                </a>
-            </div>
-
-            <div class="post__body">
-
-                <div class="post__user-info">
-                    <a href="#" class="user-info__name">Victor Robles</a>
-                    <span class="user-info__divider"> | </span>
-                    <a href="#" class="user-info__create-date">Hace 1 hora</a>
-                </div>
-
-                <h4 class="post__content">Hola, buenos dias.</h4>
-
-            </div>
-        </div>
-
-        <div class="post__buttons">
-
-            <a href="#" class="post__button">
-                <i class="fa-solid fa-trash-can"></i>
-            </a>
-
-        </div>
-
-    </div>
-
-
-</div>
-
-<div class="content__container-btn">
-    <button class="content__btn-more-post">
-        Ver mas publicaciones
-    </button>
-</div>
-
-</section>
-
-    </>  );
+  );
 }
 
 export default FeedPage;
