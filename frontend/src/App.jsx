@@ -1,13 +1,11 @@
-import HeaderPage from "./componets/layaout/general/Header"
-import HeaderPublicPage from "./componets/layaout/public/HeaderPulic"
+import RoutingApp from "./routes/Routing"
 
 function App() {
 
   return (
     <>
          <div className="layaut">
-
-           <HeaderPublicPage/>
+          <RoutingApp/>
          </div>
     </>
   )
