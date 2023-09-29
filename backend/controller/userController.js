@@ -111,7 +111,7 @@ const getUsers = async (req, res) => {
     if (users.docs.length === 0) {
       return res.status(404).json({
         status: "Error",
-        message: "No se han encontrado usuarios",
+        msg: "No se han encontrado usuarios",
       });
     }
 
@@ -120,7 +120,7 @@ const getUsers = async (req, res) => {
 
     return res.status(200).json({
       status: "success",
-      message: "Listado de usuarios",
+      msg: "Listado de usuarios",
       users: users.docs,
       page,
       itemsPerPage,
@@ -132,8 +132,8 @@ const getUsers = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       status: "Error",
-      message: "Hubo un error al obtener los usuarios",
-      error: error.message,
+      msg: "Hubo un error al obtener los usuarios",
+      error: error.msg,
     });
   }
 };
@@ -146,7 +146,7 @@ const RegisterUser = async (req, res) => {
 
     // Validar datos
     if (!params.name || !params.nick || !params.email || !params.password) {
-      return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      return res.status(400).json({ msg: "Todos los campos son obligatorios" });
     }
 
     // Validar si el usuario existe
@@ -155,7 +155,7 @@ const RegisterUser = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(200).json({ message: "El usuario ya existe" });
+      return res.json({ msg: "El usuario ya existe" });
     }
 
     // Cifrar contraseña
@@ -167,13 +167,14 @@ const RegisterUser = async (req, res) => {
     await userNew.save();
 
     // Devolver respuesta
-    return res.status(200).json({
-      message: "Usuario creado correctamente",
+    return res.json({
+      msg: "Usuario creado correctamente",
+      status: "200",
       userNew,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Error al guardar el usuario", error: error.message });
+    return res.status(500).json({ msg: "Error al guardar el usuario", error: error.msg });
   }
 };
 
@@ -244,7 +245,7 @@ const counterUsers = async (req, res) => {
   } catch (error) {
       return res.status(500).send({
           status: "error",
-          message: "Error en los contadores",
+          msg: "Error en los contadores",
           error
       });
   }

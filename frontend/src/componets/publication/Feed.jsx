@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import useAuth from '../../hooks/useAuth';
 
 function  FeedPage() {
+  const{user}=useAuth();
   const [tweets, setTweets] = useState([
     {
       id: 1,
@@ -20,7 +22,7 @@ function  FeedPage() {
     const updatedTweets = tweets.filter((tweet) => tweet.id !== id);
     setTweets(updatedTweets);
   };
-
+  console.log(user);
   return (
     <div className="container mt-4">
       {tweets.map((tweet) => (

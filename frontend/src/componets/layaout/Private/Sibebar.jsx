@@ -1,18 +1,34 @@
+import React from "react";
 import avatar from "../../../assets/img/user.png";
-function SibeNavar() {
+import useAuth from "../../../hooks/useAuth";
+
+function SideNavbar() {
+  const { user } = useAuth();
+
   return (
     <div className="container mt-4">
       <div className="row">
         <div className="row">
           <div className="card">
             <div className="card-body text-center">
-              <img
-                src={avatar}
-                alt="avatar"
-                className="img-thumbnail mb-3"
-                style={{ width: "150px", height: "150px" }}
-              />
-              <h5 className="card-title">TuNombreDeUsuario</h5>
+              {user.image !== "image.png" ? (
+                <img
+                  className="img-thumbnail mb-3"
+                  style={{ width: "150px", height: "150px" }}
+                  src={`http://localhost:4100/api/users/avatar/${user.image}`}
+                  alt="Avatar"
+                />
+              ) : (
+                <img
+                  src={avatar}
+                  alt="Avatar"
+                  className="img-thumbnail mb-3"
+                  style={{ width: "150px", height: "150px" }}
+                />
+              )}
+
+              <h5 className="card-title">{user.name} {user.surname}</h5>
+              <p className="card-text">{user.nick}</p>
               <p className="card-text">Seguidores: 1000</p>
               <p className="card-text">Seguidos: 500</p>
               <p className="card-text">Total de publicaciones: 50</p>
@@ -54,4 +70,4 @@ function SibeNavar() {
   );
 }
 
-export default SibeNavar;
+export default SideNavbar;

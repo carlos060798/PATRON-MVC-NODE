@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import HeaderPage from "./Header";
-import SibeNavar from "./sibebar";
+import SideNavbar from "./Sibebar";
 
 function LayautPrivate() {
   return (
@@ -15,7 +15,7 @@ function LayautPrivate() {
           </div>
           <div className="col-md-5">
             {/*Sidebar*/}
-            <SibeNavar />
+            <SideNavbar />
           </div>
         </div>
       </div>

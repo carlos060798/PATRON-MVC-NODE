@@ -1,3 +1,4 @@
+
 import {
   BrowserRouter as Router,
   Route,
@@ -9,10 +10,13 @@ import Login from "../componets/users/Login";
 import Registro from "../componets/users/Register";
 import LayautPrivate from "../componets/layaout/Private/LayautPrivate";
 import FeedPage from "../componets/publication/Feed";
+import { AuthProvider } from "../contexts/AuthProvider";
+
 function RoutingApp() {
   return (
     <>
       <Router>
+        <AuthProvider>
         <Routes>
           <Route path="/" element={<LayautPublic />}>
             <Route index element={<Login />} />
@@ -25,6 +29,7 @@ function RoutingApp() {
           </Route>
           <Route path="*" element={<Navigate to="/"/>}/>
         </Routes>
+        </AuthProvider>
       </Router>
     </>
   );

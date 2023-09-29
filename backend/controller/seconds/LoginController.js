@@ -26,7 +26,8 @@ const loginUser = async (req, res) => {
     const token = generarToken(userexist);
     // Devolver respuesta
 
-    return res.status(200).json({
+    return res.json({
+      status:200,
       message: "Usuario logueado correctamente",
       userexist: {
         _id: userexist._id,
