@@ -3,7 +3,8 @@ import avatar from "../../../assets/img/user.png";
 import useAuth from "../../../hooks/useAuth";
 
 function SideNavbar() {
-  const { user } = useAuth();
+  const { user,counter } = useAuth();
+  console.log(counter);  
 
   return (
     <div className="container mt-4">
@@ -29,9 +30,9 @@ function SideNavbar() {
 
               <h5 className="card-title">{user.name} {user.surname}</h5>
               <p className="card-text">{user.nick}</p>
-              <p className="card-text">Seguidores: 1000</p>
-              <p className="card-text">Seguidos: 500</p>
-              <p className="card-text">Total de publicaciones: 50</p>
+              <p className="card-text">Seguidores:{counter.following}</p>
+              <p className="card-text">Seguidos: {counter.followed}</p>
+              <p className="card-text">Publicaciones: { counter.publications}</p>
             </div>
           </div>
         </div>

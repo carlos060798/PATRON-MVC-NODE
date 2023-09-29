@@ -7,6 +7,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  const [counter, setCounter] = useState({});
 
   useEffect(() => {
     autUser();
@@ -37,13 +38,24 @@ export const AuthProvider = ({ children }) => {
         config
       );
       setUser(response.data.user);
+
+      // Obtener el contador de publicaciones
+      const responseCounter = await axios.get(
+        `http://localhost:4100/api/users/counter/${userId}`,
+        config
+      );
+      setCounter({
+        following: responseCounter.data.following,
+        followed: responseCounter.data.followed,
+        publications: responseCounter.data.publications,
+      });
     } catch (error) {
       console.error("Error al obtener el usuario:", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user,setUser }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user,setUser,counter }}>{children}</AuthContext.Provider>
   );
 };
 
