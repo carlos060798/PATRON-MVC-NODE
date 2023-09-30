@@ -11,6 +11,7 @@ import Registro from "../componets/users/Register";
 import LayautPrivate from "../componets/layaout/Private/LayautPrivate";
 import FeedPage from "../componets/publication/Feed";
 import { AuthProvider } from "../contexts/AuthProvider";
+import LogautClose from "../componets/users/Logaut";
 
 function RoutingApp() {
   return (
@@ -26,6 +27,7 @@ function RoutingApp() {
           <Route path="/social" element={<LayautPrivate/>} >
            <Route index element={<FeedPage/>}/>
            <Route path="feed" element={<FeedPage/>}/>
+           <Route path="logaut" element={< LogautClose/>}/>
           </Route>
           <Route path="*" element={<Navigate to="/"/>}/>
         </Routes>

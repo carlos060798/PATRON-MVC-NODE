@@ -39,6 +39,10 @@ const useLogin = () => {
       localStorage.setItem("user", JSON.stringify(data.userexist));
 
       // Si todo sale bien, redireccionar al usuario
+      setTimeout(() => {
+        window.location.href = "/social";
+
+      }, 3000);
     } catch (error) {
       console.log(error);
       setAlerta({

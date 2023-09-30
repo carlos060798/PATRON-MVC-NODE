@@ -5,43 +5,38 @@ import useAuth from "../../../hooks/useAuth";
 import SideNavbar from "./Sibebar";
 
 function LayautPrivate() {
-    const { user } = useAuth();
+  const { user, loading } = useAuth();
 
-
+  if (loading) {
+    return <h1 className="text-center mt-5">Cargando...</h1>;
+  } else {
     return (
-        <>
-            {/* Layout */}
-            <HeaderPage />
-            {/* Contenido principal */}
-            <div className="container mt-4">
-                <div className="row">
-                    <div className="col-md-7">
-                        <Outlet />
-                    </div>
-                    <div className="col-md-5">
-                        {/* Sidebar */}
-                        <SideNavbar />
-                    </div>
+      <>
+        {/* Layout */}
+        <HeaderPage />
+        {/* Contenido principal */}
+        <div className="container mt-4">
+          <div className="row">
+            {user._id ? (
+              <>
+                <div className="col-md-7">
+                  <Outlet />
                 </div>
-            </div>
-        </>
+                <div className="col-md-5">
+                  {/* Sidebar */}
+                  <SideNavbar />
+                </div>
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )}
+          </div>
+        </div>
+      </>
     );
+  }
 }
-
 export default LayautPrivate;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*import { Outlet } from "react-router-dom";
 import HeaderPage from "./Header";

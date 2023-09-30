@@ -8,6 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [counter, setCounter] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     autUser();
@@ -18,7 +19,8 @@ export const AuthProvider = ({ children }) => {
     const userString = localStorage.getItem("user");
 
     if (!token || !userString) {
-      return;
+      setLoading(false);
+      return false;
     }
 
     // Convertir la cadena de texto del usuario de localStorage en un objeto
@@ -49,13 +51,18 @@ export const AuthProvider = ({ children }) => {
         followed: responseCounter.data.followed,
         publications: responseCounter.data.publications,
       });
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener el usuario:", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user,setUser,counter }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{ user, setUser, counter, loading, setCounter }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

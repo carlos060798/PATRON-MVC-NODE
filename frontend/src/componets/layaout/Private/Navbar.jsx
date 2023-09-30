@@ -1,5 +1,6 @@
 
 
+import { NavLink } from 'react-router-dom';
 import avatar from '../../../assets/img/user.png';
 function NavbarPage() {
   return (
@@ -59,9 +60,9 @@ function NavbarPage() {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/social/logaut" className="nav-link" >
                 <i className="fas fa-sign-out-alt"></i> Cerrar Sesión
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
