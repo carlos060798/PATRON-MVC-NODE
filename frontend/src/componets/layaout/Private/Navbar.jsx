@@ -1,8 +1,9 @@
-
-
-import { NavLink } from 'react-router-dom';
-import avatar from '../../../assets/img/user.png';
+import { NavLink } from "react-router-dom";
+import avatar from "../../../assets/img/user.png";
+import useAuth from "../../../hooks/useAuth";
 function NavbarPage() {
+  const { user } = useAuth();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -21,46 +22,61 @@ function NavbarPage() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav text-center">
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/social" className="nav-link">
                 <i className="fas fa-home"></i> Inicio
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/social/feed" className="nav-link">
                 <i className="fas fa-list"></i> Timeline
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/social/gente" className="nav-link">
                 <i className="fas fa-user"></i> Gente
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
-        <div className="collapse navbar-collapse justify-content-center align-items-center" id="navbarNav">
+        <div
+          className="collapse navbar-collapse justify-content-center align-items-center"
+          id="navbarNav"
+        >
           <ul className="navbar-nav text-center">
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                <img
-                  src={avatar}
-                  alt="Imagen de perfil"
-                  className="avatar-img img-fluid"
-                  style={{ width: "24px", height: "24px" }}
-                />
-              </a>
+              <NavLink className="nav-link">
+                {user.image !== "image.png" ? (
+                  <img
+                    className="img-thumbnail mb-3"
+                    style={{ width: "32px", height: "32px" }}
+                    src={`http://localhost:4100/api/users/avatar/${user.image}`}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <img
+                    src={avatar}
+                    alt="Avatar"
+                    className="img-thumbnail mb-3"
+                    style={{ width: "32px", height: "32px" }}
+                  />
+                )}
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                <span className="nick-name">Nick Name:</span>
-              </a>
+              <NavLink className="nav-link">
+                <span className="nick-name">
+                  {user.name}
+                  {user.surname}
+                </span>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink to="/social/settings" className="nav-link">
                 <i className="fas fa-cog"></i> Ajustes
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/social/logaut" className="nav-link" >
+              <NavLink to="/social/logaut" className="nav-link">
                 <i className="fas fa-sign-out-alt"></i> Cerrar Sesión
               </NavLink>
             </li>
@@ -72,4 +88,3 @@ function NavbarPage() {
 }
 
 export default NavbarPage;
-
