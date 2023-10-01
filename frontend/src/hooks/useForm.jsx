@@ -7,6 +7,7 @@ function useForm() {
     name: "",
     surname: "",
     nick: "",
+    bio: "",
     email: "",
     password: "",
   });
@@ -33,6 +34,7 @@ function useForm() {
         formData.nick,
         formData.email,
         formData.password,
+        formData.bio,
       ].includes("")
     ) {
       setAlerta({

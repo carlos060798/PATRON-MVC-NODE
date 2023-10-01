@@ -55,6 +55,19 @@ function Registro() {
                       value={formData.nick}
                       onChange={handleChange}
                     />
+                  </div> 
+                  <div className="mb-3">
+                    <label htmlFor="nick" className="form-label">
+                      Bio
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="bio"
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleChange}
+                    />
                   </div>
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">

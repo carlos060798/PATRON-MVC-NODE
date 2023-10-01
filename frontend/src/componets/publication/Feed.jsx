@@ -53,12 +53,10 @@ function FeedPage() {
               <p>Este es un tweet de ejemplo 1.</p>
             </div>
             <div className="d-flex">
-              <button type="button" className="btn btn-primary btn-sm mx-2">
-                <i className="fas fa-thumbs-up"></i> Like
+              <button type="button" className="btn btn-danger btn-sm mx-2">
+              <i className="fas fa-trash-alt"></i> Eliminar
               </button>
-              <button type="button" className="btn btn-danger btn-sm">
-                <i className="fas fa-thumbs-down"></i> Dislike
-              </button>
+             
             </div>
           </div>
         </div>
