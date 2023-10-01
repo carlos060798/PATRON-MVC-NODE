@@ -154,14 +154,15 @@ const counterUsers = async (req, res) => {
 
       const publications = await Publication.count({ "user": userId });
 
-      return res.status(200).send({
+      return res.json({
+          status: "success",
           userId,
           following: following,
           followed: followed,
           publications: publications
       });
   } catch (error) {
-      return res.status(500).send({
+      return res.json({
           status: "error",
           msg: "Error en los contadores",
           error
