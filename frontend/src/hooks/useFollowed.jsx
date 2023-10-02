@@ -9,10 +9,10 @@ function useFollowing() {
     const { userId } = useParams();
 
     useEffect(() => {
-        getFollowing(page);
+        getfollowers(page);
     }, [page, userId]);
 
-    const getFollowing = async (pageid) => {
+    const getfollowers = async (pageid) => {
         try {
             let token = localStorage.getItem("token");
             const config = {
@@ -23,17 +23,16 @@ function useFollowing() {
             };
 
             const response = await axios.get(
-                `http://localhost:4100/api/follow/following/${userId}/${pageid}`,
+                `http://localhost:4100/api/follow/followers/${userId}/${pageid}`,
                 config
             );
               console.log(response.data.followings);
-             /* ... tu objeto de respuesta desde la consulta de axios ... */;
              const { data, status } = response;
-
-            const followedUsers = response.data.users.map(user => user.followed);
-            let flattenedFollowedUsers = [].concat(...followedUsers);
+            let cleanUsers=[]
+            response.data.users.forEach(followed => 
+              cleanUsers= [...cleanUsers, followed.user]);
             
-            data.users=(flattenedFollowedUsers);
+            data.users=cleanUsers;
 
             if (status === 200) {
                 if (pageid === 1) {
@@ -41,7 +40,7 @@ function useFollowing() {
                 } else {
                     setUser([...users, ...data.users]);
                 }
-                setFollowing(data.data.followings);
+                setFollowing(data.userfollowingsme);
             }
         } catch (error) {
             // Manejar errores de la solicitud HTTP aquí
@@ -52,24 +51,61 @@ function useFollowing() {
     const nextPage = () => {
         const nextPageNumber = page + 1;
         setPage(nextPageNumber);
-        getFollowing(nextPageNumber);
+        getfollowers(nextPageNumber);
     };
 
     const handleLike = async (userId) => {
-        try {
-            // ... código para manejar el like ...
-        } catch (error) {
-            console.error("Error liking user: ", error);
+        const token = localStorage.getItem("token");
+    
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        };
+    
+        const body = {
+          followed: userId,
+        };
+    
+        const response = await axios.post(
+          "http://localhost:4100/api/follow/save",
+          body,
+          config
+        );
+    
+        // Manejar la respuesta del servidor
+        const { data, status } = response;
+    
+        if (status == 200) {
+          setFollowing([...following,userId]);
+          console.log(data.user);
         }
-    };
-
-    const handleDislike = async (userId) => {
-        try {
-            // ... código para manejar el dislike ...
-        } catch (error) {
-            console.error("Error disliking user: ", error);
+      };
+    
+      const handleDislike = async (userId) => {
+        console.log(userId);
+        const token = localStorage.getItem("token");
+        console.log(token);
+    
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        };
+    
+    
+        const response = await axios.delete(`http://localhost:4100/api/follow/delete/${userId}`,config );
+    
+        // Manejar la respuesta del servidor
+        const { data, status } = response;
+    
+        if (status == 200) {
+          setFollowing(following.filter((follow) => follow !== userId));
+          console.log(data.user);
         }
-    };
+      };
 
     return {
         users,

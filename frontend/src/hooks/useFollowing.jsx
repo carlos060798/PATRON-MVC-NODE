@@ -55,20 +55,57 @@ function useFollowing() {
     };
 
     const handleLike = async (userId) => {
-        try {
-            // ... código para manejar el like ...
-        } catch (error) {
-            console.error("Error liking user: ", error);
+        const token = localStorage.getItem("token");
+    
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        };
+    
+        const body = {
+          followed: userId,
+        };
+    
+        const response = await axios.post(
+          "http://localhost:4100/api/follow/save",
+          body,
+          config
+        );
+    
+        // Manejar la respuesta del servidor
+        const { data, status } = response;
+    
+        if (status == 200) {
+          setFollowing([...following,userId]);
+          console.log(data.user);
         }
-    };
-
-    const handleDislike = async (userId) => {
-        try {
-            // ... código para manejar el dislike ...
-        } catch (error) {
-            console.error("Error disliking user: ", error);
+      };
+    
+      const handleDislike = async (userId) => {
+        console.log(userId);
+        const token = localStorage.getItem("token");
+        console.log(token);
+    
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        };
+    
+    
+        const response = await axios.delete(`http://localhost:4100/api/follow/delete/${userId}`,config );
+    
+        // Manejar la respuesta del servidor
+        const { data, status } = response;
+    
+        if (status == 200) {
+          setFollowing(following.filter((follow) => follow !== userId));
+          console.log(data.user);
         }
-    };
+      };
 
     return {
         users,
