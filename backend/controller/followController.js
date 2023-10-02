@@ -1,100 +1,3 @@
-/**
- * components:
- *   schemas:
- *     Follow:
- *       type: object
- *       properties:
- *         user:
- *           type: string
- *           description: ID del usuario que sigue.
- *         followed:
- *           type: string
- *           description: ID del usuario seguido.
- *         createdAt:
- *           type: string
- *           description: Fecha de creación del seguimiento.
- *
- * /api/follows:
- *   post:
- *     summary: Crea un nuevo seguimiento.
- *     description: Crea un nuevo seguimiento de usuario.
- *     parameters:
- *       - name: body
- *         in: body
- *         description: Datos para crear el seguimiento.
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             followed:
- *               type: string
- *               description: ID del usuario a seguir.
- *     responses:
- *       201:
- *         description: Seguimiento creado con éxito.
- *       400:
- *         description: Error en los datos de entrada.
- *       500:
- *         description: Error en el servidor.
- *
- * /api/follows/{id}:
- *   delete:
- *     summary: Elimina un seguimiento.
- *     description: Elimina un seguimiento de usuario por ID.
- *     parameters:
- *       - name: id
- *         in: path
- *         description: ID del seguimiento a eliminar.
- *         required: true
- *         type: string
- *     responses:
- *       200:
- *         description: Seguimiento eliminado con éxito.
- *       404:
- *         description: Seguimiento no encontrado.
- *       500:
- *         description: Error en el servidor.
- *
- * /api/follows/following/{id}?page={page}:
- *   get:
- *     summary: Lista usuarios seguidos por un usuario.
- *     description: Obtiene una lista de usuarios seguidos por un usuario.
- *     parameters:
- *       - name: id
- *         in: path
- *         description: ID del usuario cuyos seguidos se quieren listar.
- *         required: true
- *         type: string
- *       - name: page
- *         in: query
- *         description: Número de página para la paginación.
- *         type: integer
- *     responses:
- *       200:
- *         description: Lista de usuarios seguidos obtenida con éxito.
- *       500:
- *         description: Error en el servidor.
- *
- * /api/follows/followers/{id}?page={page}:
- *   get:
- *     summary: Lista usuarios que siguen a un usuario.
- *     description: Obtiene una lista de usuarios que siguen a un usuario.
- *     parameters:
- *       - name: id
- *         in: path
- *         description: ID del usuario cuyos seguidores se quieren listar.
- *         required: true
- *         type: string
- *       - name: page
- *         in: query
- *         description: Número de página para la paginación.
- *         type: integer
- *     responses:
- *       200:
- *         description: Lista de usuarios seguidores obtenida con éxito.
- *       500:
- *         description: Error en el servidor.
- */
 import Follow from "../models/followModel.js";
 import mongoosePaginate from 'mongoose-paginate-v2';
 import { followUserIds } from "../services/followuserId.js";
@@ -126,7 +29,7 @@ const createFollow = async (req, res) => {
         }
 
         // Responder con éxito
-        return res.status(201).send({
+        return res.status(200).send({
             status: "success",
             identity: req.user,
             follow: followStored
@@ -146,14 +49,14 @@ const getFollowing = async (req, res) => {
     try {
         // Obtener el ID del usuario actual
         let userId = req.user.id;
-        
+
         // Comprobar si llega un ID de usuario diferente por la URL
         if (req.params.id) userId = req.params.id;
-        
+
         // Comprobar si llega la página por la URL, si no, por defecto es 1
         let page = 1;
         if (req.query.page) page = parseInt(req.query.page);
-        
+
         const itemsPerPage = 5;
 
         // Configuración de la paginación utilizando mongoose-paginate-v2 y mantener la población
@@ -177,11 +80,11 @@ const getFollowing = async (req, res) => {
         };
 
         // Obtener la lista de usuarios seguidos por el usuario con ID 'userId'
-        const followings = await Follow.paginate({ user: userId }, options); 
+        const followings = await Follow.paginate({ user: userId }, options);
 
         // Obtener la lista de usuarios que sigues y los que te siguen
-        let   user_followings = followUserIds(req.user.id);
-        
+        let user_followings = followUserIds(req.user.id);
+
         // Responder con los resultados
         res.json({
             message: "Usuarios seguidos",
@@ -205,14 +108,14 @@ const getFollowers = async (req, res) => {
     try {
         // Obtener el ID del usuario actual
         let userId = req.user.id;
-        
+
         // Comprobar si llega un ID de usuario diferente por la URL
         if (req.params.id) userId = req.params.id;
-        
+
         // Comprobar si llega la página por la URL, si no, por defecto es 1
         let page = 1;
         if (req.query.page) page = parseInt(req.query.page);
-        
+
         const itemsPerPage = 5;
 
         // Configuración de la paginación utilizando mongoose-paginate-v2 y mantener la población
@@ -236,11 +139,11 @@ const getFollowers = async (req, res) => {
         };
 
         // Obtener la lista de usuarios que siguen al usuario con ID 'userId'
-        const followings = await Follow.paginate({ followed: userId }, options); 
+        const followings = await Follow.paginate({ followed: userId }, options);
 
         // Obtener la lista de usuarios que sigues y los que te siguen
-        let   user_followings = followUserIds(req.user.id);
-        
+        let user_followings = followUserIds(req.user.id);
+
         // Responder con los resultados
         res.json({
             message: "Usuarios que me siguen",
@@ -262,34 +165,31 @@ const getFollowers = async (req, res) => {
 // Elimina un seguimiento (follow) por ID
 const deleteFollow = async (req, res) => {
     try {
-        // Obtener el ID del usuario autenticado
-        const identity = req.user.id;
+        // Recoger el id del usuario identificado
+        const userId = req.user.id;
 
-        // Obtener el ID del seguimiento a eliminar
-        const followId = req.params.id;
+        // Recoger el id del usuario que sigo y quiero dejar de seguir
+        const followedId = req.params.id;
 
-        // Buscar el seguimiento y eliminarlo
-        const follow = await Follow.findByIdAndDelete(followId);
+        // Encontrar y eliminar el seguimiento
+        const deleteResult = await Follow.deleteOne({ user: userId, followed: followedId });
 
-        if (!follow) {
-            // Manejar el caso en el que el seguimiento no se encuentra
-            return res.status(404).json({
-                message: "Seguimiento no encontrado"
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).send({
+                status: "error",
+                message: "No estás siguiendo a este usuario"
             });
         }
 
-        // Responder con éxito
-        res.json({
-            message: "Seguimiento eliminado con éxito",
-            identity,
-            followId,
-            follow,
+        return res.status(200).send({
+            status: "success",
+            message: "Dejaste de seguir al usuario correctamente"
         });
     } catch (error) {
-        // Manejar errores del servidor
         console.error(error);
-        res.status(500).json({ message: "Error en el servidor", error });
+        return res.status(500).json({ message: "Error en el servidor", error });
     }
 };
+
 
 export { getFollowers, createFollow, deleteFollow, getFollowing };

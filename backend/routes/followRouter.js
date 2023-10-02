@@ -11,7 +11,7 @@ router.get('/following/:id?/:page?', auth, getFollowing);
 router.get('/followers/:id?/:page?', auth, getFollowers);
 
 // Ruta para crear un nuevo seguimiento (follow)
-router.post('/save', auth, createFollow);
+router.post('/save',auth ,createFollow);
 
 // Ruta para eliminar un seguimiento (follow) por ID
 router.delete('/delete/:id', auth, deleteFollow);

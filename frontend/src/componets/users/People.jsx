@@ -3,7 +3,9 @@ import avatar from "../../assets/img/user.png";
 import useUser from "../../hooks/useUser";
 
 function PeoplePage() {
-  const { users,nextPage } = useUser();
+  const { users, nextPage, following,handleLike,
+    handleDislike
+    } = useUser();
 
   return (
     <>
@@ -39,12 +41,20 @@ function PeoplePage() {
                   <p>{user.bio}</p>
                 </div>
                 <div className="d-flex">
-                  <button type="button" className="btn btn-primary btn-sm mx-2">
-                    <i className="fas fa-thumbs-up"></i> Like
-                  </button>
-                  <button type="button" className="btn btn-danger btn-sm">
-                    <i className="fas fa-thumbs-down"></i> Dislike
-                  </button>
+                  {!following.includes(user._id) ? (
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm mx-2"
+                        onClick={() => handleLike(user._id)}
+                    >
+                      <i className="fas fa-thumbs-up"></i> Like
+                    </button>
+                  ) : (
+                    <button type="button" className="btn btn-danger btn-sm"
+                     onClick={()=> handleDislike(user._id) } >
+                      <i className="fas fa-thumbs-down"></i> Dislike
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
