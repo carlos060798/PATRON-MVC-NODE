@@ -92,8 +92,8 @@ const getFollowing = async (req, res) => {
             totalPages: followings.totalPages,
             currentPage: followings.page,
             users: followings.users,
-            userfollowings: (await user_followings).following,
-            userfollowingsme: (await user_followings).followers
+            followings: (await user_followings).following,
+            followingsme: (await user_followings).followers
         });
 
     } catch (error) {

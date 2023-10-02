@@ -13,6 +13,8 @@ import { AuthProvider } from "../contexts/AuthProvider";
 import LogautClose from "../componets/users/Logaut";
 import PeoplePage from "../componets/users/People";
 import EditPage from "../componets/users/Edit";
+import FollowingPage from "../componets/follows/following";
+import FollowersPage from "../componets/follows/followers";
 
 function RoutingApp() {
   return (
@@ -30,7 +32,10 @@ function RoutingApp() {
               <Route path="feed" element={<FeedPage />} />
               <Route path="logaut" element={<LogautClose />} />
               <Route path="gente" element={<PeoplePage />} />
-              <Route path="settings" element={<EditPage />} />
+              <Route path="settings" element={<EditPage />} /> 
+              <Route path="siguindo/:userId" element={<FollowingPage />} />
+              <Route path="segidores/:userId" element={<FollowersPage/>} />
+
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
