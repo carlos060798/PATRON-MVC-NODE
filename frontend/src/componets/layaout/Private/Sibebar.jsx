@@ -1,4 +1,4 @@
-// deudas mejora la limpiada del formulario de publicaciones 
+// deudas mejora la limpiada del formulario de publicaciones
 // mejorar los contadores sean mas limpios  y se actualizen del todo
 
 import React, { useState } from "react";
@@ -9,58 +9,51 @@ import usePublication from "../../../hooks/usePublication";
 
 function SideNavbar() {
   const { user, counter } = useAuth();
-  const { formData, handleChange, CreatePublication }= usePublication();
-
+  const { formData, handleChange, CreatePublication } = usePublication();
 
   return (
     <div className="container mt-4">
       <div className="row">
-        <div className="row">
-          <div className="card">
-            <div className="card-body text-center">
-              {user.image !== "image.png" ? (
-                <img
-                  className="img-thumbnail mb-3"
-                  style={{ width: "150px", height: "150px" }}
-                  src={`http://localhost:4100/api/users/avatar/${user.image}`}
-                  alt="Avatar"
-                />
-              ) : (
-                <img
-                  src={avatar}
-                  alt="Avatar"
-                  className="img-thumbnail mb-3"
-                  style={{ width: "150px", height: "150px" }}
-                />
-              )}
-
-              <h5 className="card-title">
-                {user.name} {user.surname}
-              </h5>
-              <p className="card-text">{user.nick}</p>
-              <div className="d-flex ">
-                <Link
-                  to={`siguindo/${user._id}`}
-                  className="btn btn-primary btn-sm mx-2"
-                >
-                  Seguidores:{counter.following}{" "}
-                </Link>
-                <Link
-                  to={`segidores/${user._id}`}
-                  className="btn btn-primary btn-sm mx-2"
-                >
-                  Seguidos: {counter.followed}
-                </Link>
-                <Link
-                  to={`/profile/delete/${user._id}`}
-                  className="btn btn-primary btn-sm mx-2"
-                >
-                  Publicaciones: {counter.publications}
-                </Link>
-              </div>
+      <div className="row">
+        <div className="col-md-3 text-center">
+          {user.image !== "image.png" ? (
+            <img
+              className="img-fluid rounded-circle mb-3"
+              style={{ width: "150px", height: "150px" }}
+              src={`http://localhost:4100/api/users/avatar/${user.image}`}
+              alt="Avatar"
+            />
+          ) : (
+            <img
+              src={avatar}
+              alt="Avatar"
+              className="img-fluid rounded-circle mb-3"
+              style={{ width: "150px", height: "150px" }}
+            />
+          )}
+        </div>
+        <div className="col-md-9">
+          <h2>
+            <Link to={`perfil/${user._id}`} className="text-muted">
+              {user.name} {user.surname}
+            </Link>
+          </h2>
+          <p className="text-muted">@{user.nick}</p>
+          <p>{user.bio}</p>
+          <div className="row">
+            <div className="col-md-4">
+              <p><strong>Seguidores</strong><br /> {counter.following}{" "}</p>
+            </div>
+            <div className="col-md-4">
+              <p><strong>Seguidos</strong><br /> {counter.followed}</p>
+            </div>
+            <div className="col-md-4">
+              <p><strong>Publicaciones</strong><br />{counter.publications}</p>
             </div>
           </div>
         </div>
+      </div>
+        
 
         <div className="row">
           <div className="card">

@@ -63,7 +63,7 @@ function NavbarPage() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link">
+              <NavLink to={`perfil/${user._id}`} className="nav-link">
                 <span className="nick-name">
                   {user.name}
                   {user.surname}

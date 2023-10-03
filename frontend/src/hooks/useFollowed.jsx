@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import getPerfil from "../helpers/getPerfil";
 
 function useFollowing() {
     const [users, setUser] = useState([]);
     const [following, setFollowing] = useState([]);
     const [page, setPage] = useState(1);
+    const [Perfil, setPerfil] = useState({});
     const { userId } = useParams();
 
     useEffect(() => {
         getfollowers(page);
+        getPerfil(userId,setPerfil);
+
     }, [page, userId]);
 
     const getfollowers = async (pageid) => {
@@ -113,6 +117,7 @@ function useFollowing() {
         nextPage,
         handleLike,
         handleDislike,
+        Perfil
     };
 }
 

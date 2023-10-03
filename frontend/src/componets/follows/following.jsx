@@ -10,13 +10,13 @@ function FollowingPage() {
     nextPage,
     handleLike,
     handleDislike,
+    Perfil
   } = useFollowing();
   const {user}=useAuth();
-  console.log(following);
 
   return ( 
   <div className="container mt-4">
-      <h1>usuarios que sigue</h1>
+      <h1>usuarios que sigue {Perfil.name}{Perfil.nick}</h1>
       {users.map((USER) => (
         <div className="card mb-3 d-flex p-4" key={USER._id}>
           <div className="d-flex align-items-center mr-3">

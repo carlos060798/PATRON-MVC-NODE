@@ -15,6 +15,7 @@ import PeoplePage from "../componets/users/People";
 import EditPage from "../componets/users/Edit";
 import FollowingPage from "../componets/follows/following";
 import FollowersPage from "../componets/follows/followers";
+import PerfilPage from "../componets/users/Perfil";
 
 function RoutingApp() {
   return (
@@ -34,7 +35,8 @@ function RoutingApp() {
               <Route path="gente" element={<PeoplePage />} />
               <Route path="settings" element={<EditPage />} /> 
               <Route path="siguindo/:userId" element={<FollowingPage />} />
-              <Route path="segidores/:userId" element={<FollowersPage/>} />
+              <Route path="segidores/:userId" element={<FollowersPage/>} /> 
+              <Route path="perfil/:userId" element={<PerfilPage/>}/>
 
             </Route>
             <Route path="*" element={<Navigate to="/" />} />

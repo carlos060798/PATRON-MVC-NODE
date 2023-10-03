@@ -2,6 +2,7 @@ import React from "react";
 import avatar from "../../assets/img/USER.png";
 import useUser from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 function PeoplePage() {
   const { user } = useAuth();
@@ -28,9 +29,9 @@ function PeoplePage() {
                 style={{ width: "34px", height: "34px" }}
               />
             )}
-            <h5 className="mt-4">
-              {USER.name} {USER.surname}
-            </h5>
+            <Link to={`/social/perfil/${USER._id}`} className="mt-4">
+              <p> {USER.name} {USER.surname}</p>
+            </Link>
             <p className="text-muted mt-4 mx-1">{USER.create_at}</p>
           </div>
           <div className="d-flex flex-column w-100">

@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import getPerfil from "../helpers/getPerfil";
 
 function useFollowing() {
     const [users, setUser] = useState([]);
     const [following, setFollowing] = useState([]);
     const [page, setPage] = useState(1);
     const { userId } = useParams();
+    const [Perfil, setPerfil] = useState({});
 
     useEffect(() => {
         getFollowing(page);
-    }, [page, userId]);
+        getPerfil(userId,setPerfil);
+    }, []);
 
     const getFollowing = async (pageid) => {
         try {
@@ -79,7 +82,6 @@ function useFollowing() {
     
         if (status == 200) {
           setFollowing([...following,userId]);
-          console.log(data.user);
         }
       };
     
@@ -103,16 +105,37 @@ function useFollowing() {
     
         if (status == 200) {
           setFollowing(following.filter((follow) => follow !== userId));
-          console.log(data.user);
         }
       };
 
+  /*   const getPerfil = async () => {
+        const token = localStorage.getItem("token");
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        };
+        const request = await axios.get(
+          `http://localhost:4100/api/users/profile/${userId}`,
+          config
+        );
+        console.log(request.data);
+        const {data, status} = request;
+        console.log(data.user);
+        if(status === 200){
+          setPerfil(data.user);
+        }
+        console.log(Perfil);
+      }
+*/
     return {
         users,
         following,
         nextPage,
         handleLike,
         handleDislike,
+        Perfil
     };
 }
 
