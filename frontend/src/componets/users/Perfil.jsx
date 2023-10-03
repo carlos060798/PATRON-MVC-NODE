@@ -2,20 +2,41 @@ import { useEffect, useState } from "react";
 import avatar from "../../assets/img/USER.png";
 import getPerfil from "../../helpers/getPerfil";
 import { useParams } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function PerfilPage() {
   const [user,setUser] = useState({});
-  const {counter } = useAuth();
+  const [counters, setCounters] = useState({
+    following: 0,
+    followed: 0,
+    publications: 0
+  });
   const {userId}=useParams();
-    useEffect(() => {
+   
+useEffect(() => {
         getPerfil(userId,setUser);
+        getCounters();
     },[]);
 
-    console.log(user);
+  
+    const getCounters= async()=>{
+    let  token=localStorage.getItem("token");
+      const  config={
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:token
+        }
+      }
+     const request= await axios.get(`http://localhost:4100/api/users/counter/${userId}`,config);
+      console.log(request.data);
+      const {data,status} = request
+      const { following, followed, publications } = data;
+      setCounters({ following, followed, publications });
+       
+    }
 
-    return ( <>
+return ( <>
        <div className="container mt-5">
       <div className="row">
         <div className="col-md-3">
@@ -44,18 +65,24 @@ function PerfilPage() {
           <p>{user.bio}</p>
           <div className="row">
           <div className="col-md-4">
-              <p><strong>Seguidores</strong><br /> {counter.following}{" "}</p>
+          <Link to={`/social/siguindo/${user._id}`}>
+              <strong>Seguidores</strong><br /> {counters.following}{" "}</Link>
+            </div>
             </div>
             <div className="col-md-4">
-              <p><strong>Seguidos</strong><br /> {counter.followed}</p>
+            <Link to={`/social/segidores/${user._id}`}>
+              <strong>Seguidos</strong><br /> {counters.followed}
+              </Link>
             </div>
             <div className="col-md-4">
-              <p><strong>Publicaciones</strong><br />{counter.publications}</p>
+            <Link to={`/social/feed`}> 
+              <strong>Publicaciones</strong><br />{counters.publications}
+              </Link>
             </div>
           </div>
           <button className="btn btn-primary mr-3">Seguir</button>
         </div>
-      </div>
+      
       <div className="row">
       <h1>GENTE</h1>
       <div className="card mb-3 d-flex p-4">

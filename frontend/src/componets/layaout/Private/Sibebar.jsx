@@ -42,13 +42,18 @@ function SideNavbar() {
           <p>{user.bio}</p>
           <div className="row">
             <div className="col-md-4">
-              <p><strong>Seguidores</strong><br /> {counter.following}{" "}</p>
+              <Link to={`/social/siguindo/${user._id}`}>
+              <strong>Seguidores</strong><br /> {counter.following}{" "}</Link>
             </div>
             <div className="col-md-4">
-              <p><strong>Seguidos</strong><br /> {counter.followed}</p>
+            <Link to={`/social/segidores/${user._id}`}>
+              <strong>Seguidos</strong><br /> {counter.followed}
+              </Link>
             </div>
             <div className="col-md-4">
-              <p><strong>Publicaciones</strong><br />{counter.publications}</p>
+            <Link to={`/social/feed`}> 
+              <strong>Publicaciones</strong><br />{counter.publications}
+              </Link>
             </div>
           </div>
         </div>
