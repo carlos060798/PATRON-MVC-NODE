@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
-import avatar from "../../assets/img/USER.png";
+import avatar from "../../assets/img/user.png";
 import getPerfil from "../../helpers/getPerfil";
-import { useParams } from "react-router-dom";
+import { Await, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 function PerfilPage() {
-  const [user,setUser] = useState({});
+const {user}=useAuth();
+  const [User,setUser] = useState({});
   const [counters, setCounters] = useState({
     following: 0,
     followed: 0,
     publications: 0
   });
+  const [isfollow, setIsfollow] = useState(false);
   const {userId}=useParams();
+  useEffect(() => {
+
+    getPerfil(userId,setUser)
+   getCounters();
+},[]);
    
 useEffect(() => {
-        getPerfil(userId,setUser);
+   
+    getPerfil(userId,setUser)
         getCounters();
-    },[]);
-
+    },[userId]);
   
     const getCounters= async()=>{
     let  token=localStorage.getItem("token");
@@ -40,11 +48,11 @@ return ( <>
        <div className="container mt-5">
       <div className="row">
         <div className="col-md-3">
-        {user.image !== "image.png" ? (
+        {User.image !== "image.png" ? (
                       <img
                         className="img-fluid rounded-circle mb-3"
                         style={{ width: "150px", height: "150px" }}
-                        src={`http://localhost:4100/api/users/avatar/${user.image}`}
+                        src={`http://localhost:4100/api/users/avatar/${User.image}`}
                         alt="Avatar"
                       />
                     ) : (
@@ -57,30 +65,30 @@ return ( <>
                     )}
         </div>
         <div className="col-md-9">
-          <h2>  <Link to={`perfil/${user._id}`} className="text-muted">
-              {user.name} {user.surname}
+          <h2>  <Link to={`perfil/${User._id}`} className="text-muted">
+              {User.name} {User.surname}
             </Link></h2>
           <p className="text-muted">@{user.nick}</p>
 
-          <p>{user.bio}</p>
+          <p>{User.bio}</p>
           <div className="row">
           <div className="col-md-4">
-          <Link to={`/social/siguindo/${user._id}`}>
+          <Link to={`/social/siguindo/${User._id}`}>
               <strong>Seguidores</strong><br /> {counters.following}{" "}</Link>
             </div>
             </div>
             <div className="col-md-4">
-            <Link to={`/social/segidores/${user._id}`}>
+            <Link to={`/social/segidores/${User._id}`}>
               <strong>Seguidos</strong><br /> {counters.followed}
               </Link>
             </div>
             <div className="col-md-4">
-            <Link to={`/social/feed`}> 
+            <Link > 
               <strong>Publicaciones</strong><br />{counters.publications}
               </Link>
             </div>
           </div>
-          <button className="btn btn-primary mr-3">Seguir</button>
+         
         </div>
       
       <div className="row">

@@ -19,6 +19,7 @@ const getPerfil = async (userId,setState) => {
     if(status === 200){
       setState(data.user);
     }
+    return data;
   }
 
 export default getPerfil;

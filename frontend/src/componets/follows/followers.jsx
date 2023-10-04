@@ -79,7 +79,7 @@ function FollowersPage() {
         </button>
       </div>
     </div>
-                    )
+                    
     </>  );
 }
 
