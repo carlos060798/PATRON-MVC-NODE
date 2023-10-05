@@ -63,12 +63,10 @@ function NavbarPage() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to={`perfil/${user._id}`} className="nav-link">
-                <span className="nick-name">
+                <p className="mt-2">
                   {user.name}
                   {user.surname}
-                </span>
-              </NavLink>
+                </p>
             </li>
             <li className="nav-item">
               <NavLink to="/social/settings" className="nav-link">

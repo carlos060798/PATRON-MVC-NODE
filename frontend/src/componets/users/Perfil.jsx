@@ -15,6 +15,7 @@ function PerfilPage() {
     publications: "",
   });
   const [publics, setPublics] = useState([]);
+  const [page, setPage] = useState(1);
   const { userId } = useParams();
   useEffect(() => {
     getPerfil(userId, setUser);
@@ -60,11 +61,21 @@ function PerfilPage() {
     const { publications } = data;
     console.log(publications);
     setPublics(publications);
-
     if (status == 200) {
-      setPublics(publications);
+      let newPublications= publications;
+
+      if(publics.length >= 1){
+        newPublications = [...publics, ...newPublications];
+      }
+      setPublics(newPublications);
+
     }
   };
+  const newPage = () => {
+     let pagenext= page + 1;
+    setPage(pagenext);
+    getPublications(pagenext);
+  }
 
   return (
     <>
@@ -164,7 +175,7 @@ function PerfilPage() {
             )
           )}
           <div className="d-flex justify-content-center mt-3">
-            <button type="button" className="btn btn-primary">
+            <button type="button" className="btn btn-primary" onClick={newPage}>
               Ver más publicaciones
             </button>
           </div>
