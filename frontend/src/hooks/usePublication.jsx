@@ -4,7 +4,8 @@ import useAuth from "./useAuth";
 
 const usePublication = () => {
 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState( {text: "",
+  file0: ""});
   const { user } = useAuth();
 
   let token = localStorage.getItem("token");

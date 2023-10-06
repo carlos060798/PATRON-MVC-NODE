@@ -70,7 +70,7 @@ function SideNavbar() {
                     placeholder="¿Qué estás pensando?"
                     rows="3"
                     name="text"
-                    value={formData.text}
+                    value={formData.text || ""}
                     onChange={handleChange}
                   ></textarea>
                 </div>
