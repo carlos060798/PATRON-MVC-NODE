@@ -137,6 +137,50 @@ const deletePublic = async (req, res) => {
 
 // Definir función para obtener el feed de publicaciones
 const publicFeed = async (req, res) => {
+    try {
+        let page = 1;
+        const itemsPerPage = 5;
+
+        if (req.params.page) {
+            page = parseInt(req.params.page);
+        }
+
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = page * itemsPerPage;
+
+        const totalPublications = await Publication.countDocuments();
+
+        if (startIndex >= totalPublications) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'No hay más publicaciones para mostrar.',
+                publications: [],
+            });
+        }
+
+        let publications = await Publication.find()
+            .skip(startIndex)
+            .limit(itemsPerPage)
+            .populate('user', '-password -role -__v -email')
+            .sort('-created_at');
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Feed de publicaciones',
+            total: totalPublications,
+            page: page,
+            pages: Math.ceil(totalPublications / itemsPerPage),
+            publications: publications,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'Error al obtener las publicaciones.',
+            error: error.message,
+        });
+    }
+};
+/*const publicFeed = async (req, res) => {
      // Sacar la página actual
      let page = 1;
 
@@ -162,6 +206,7 @@ const publicFeed = async (req, res) => {
          };
  
          const publications = await Publication.paginate(query, options);
+         console.log(publications);
  
          if (!publications || publications.docs.length === 0) {
              return res.status(500).send({
@@ -186,7 +231,7 @@ const publicFeed = async (req, res) => {
              message: "Error al obtener usuarios que sigues",
          });
      }
-};
+};*/
 
 // Exportar las funciones para su uso en otras partes de la aplicación
 export {
