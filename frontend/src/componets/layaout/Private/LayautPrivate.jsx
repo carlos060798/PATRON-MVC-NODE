@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import HeaderPage from "./Header";
 import useAuth from "../../../hooks/useAuth";
-import SideNavbar from "./Sibebar";
 
 function LayautPrivate() {
   const { user, loading } = useAuth();
@@ -22,10 +21,7 @@ function LayautPrivate() {
                 <div className="col-md-7">
                   <Outlet />
                 </div>
-                <div className="col-md-5">
-                  {/* Sidebar */}
-                  <SideNavbar />
-                </div>
+                
               </>
             ) : (
               <Navigate to="/login" />

@@ -3,6 +3,7 @@ import avatar from "../../assets/img/user.png";
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import usePublication from "../../hooks/usePublication";
 function FeedPage() {
   const { user } = useAuth();
   const [publics, setPublics] = useState([]);
@@ -47,9 +48,63 @@ function FeedPage() {
     getPublications(pagenext);
   };
 
+
+  const {CreatePublication,handleChange,formData,alert} = usePublication();
+
   return (
     <>
       <div className="container mt-4">
+        <div className="row">
+        <div className="row">
+          <div className="card">
+            <div className="card-body">
+              <form id="publicationform" onSubmit={CreatePublication}>
+                <div className="mb-3">
+                  <textarea
+                    className="form-control"
+                    placeholder="¿Qué estás pensando?"
+                    rows="3"
+                    name="text"
+                    value={formData.text || ""}
+                    onChange={handleChange}
+                  ></textarea>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="file0" className="form-label">
+                    Subir imagen
+                  </label>
+                  <input
+                    type="file"
+                    id="file"
+                    className="form-control"
+                    name="file0"
+                    value={formData.file0}
+                    onChange={handleChange}
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Publicar
+                </button>
+              </form>
+              {alert.type === "success" && (
+  <div className="alert alert-success mt-4" role="alert">
+    {alert.message}
+  </div>
+)}
+
+{alert.type === "error" && (
+  <div className="alert alert-danger mt-4" role="alert">
+    {alert.message}
+  </div>
+)}
+
+
+
+            </div>
+          </div>
+        </div>
+        </div>
+        <div className="row">
         <h1>Publicaciones</h1>
         {publics.map((publicacion) => (
           <div className="card mb-3 d-flex p-4" key={publicacion._id}>
@@ -87,6 +142,7 @@ function FeedPage() {
           <button type="button" className="btn btn-primary" onClick={newPage}>
             Ver más publicaciones
           </button>
+        </div>
         </div>
       </div>
     </>
