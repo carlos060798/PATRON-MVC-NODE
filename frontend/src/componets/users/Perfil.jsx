@@ -66,7 +66,7 @@ function PerfilPage() {
               </Link>
             </div>
             <div className="col-md-4">
-              <Link className="text-decoration-none text-primary text-center">
+              <Link className="text-decoration-none text-primary ">
                 <strong className="d-block mb-1">
                   Publicaciones:{" "}
                   <span className="text-center">{counters.publications}</span>
@@ -78,7 +78,7 @@ function PerfilPage() {
       </div>
       <div className="row">
         <div className="col-md-12 mt-3">
-          <h1 className="text-center fw-bolder">Mis Publicaciones</h1>
+          <h1 className="text-center text-bg-primary fw-bolder">Mis Publicaciones</h1>
         </div>
       </div>
       {publics.map((publicacion) => (
