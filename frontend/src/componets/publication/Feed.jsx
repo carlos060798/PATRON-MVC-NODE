@@ -1,5 +1,6 @@
 import usePublication from "../../hooks/usePublication";
 import avatar from "../../assets/img/user.png";
+import formatearFecha from "../../helpers/formatofecha";
 
 function FeedPage() {
 const{
@@ -12,6 +13,7 @@ const{
 }=usePublication();
 return (
   <div className="container mt-4">
+      <h1 className="text-center fw-bold text-dark">Publicaciones</h1>
     <div className="col">
       <div className="row justify-content-center align-items-center">
         <div className="card col-lg-7 col-md-10 col-12">
@@ -40,7 +42,7 @@ return (
                 />
               </div>
               <button type="submit" className="btn btn-primary">
-                <i className="fas fa-pen"></i> Publicar
+                <i className="fas fa-pen"></i> 
               </button>
             </form>
            
@@ -59,11 +61,11 @@ return (
       </div>
       <div className="row mt-4 justify-content-center">
         <div className="col-lg-7 col-md-10 col-12">
-          <h1>Publicaciones</h1>
           {publics.map((publicacion) => (
             <div className="card mb-3" key={publicacion._id}>
               <div className="card-body">
-                <div className="d-flex align-items-center">
+                <div className=" align-items-center">
+                <div className="d-flex">
                   <img
                     src={avatar}
                     className="rounded-circle mr-3"
@@ -71,19 +73,24 @@ return (
                     width="64"
                     height="64"
                   />
-                  <div>
-                    <h5 className="mt-0">
+                  
+                    <h5  className="mx-3 my-2">
                       {publicacion.user.name} {publicacion.user.surname}
                     </h5>
+                    <h5  className=" my-2">{formatearFecha(publicacion.created_at)}</h5>
+                    </div>
+                    
                     <p>{publicacion.text}</p>
                     {publicacion.file && (
-                      <img
-                        src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
-                        alt=""
-                        className="img-fluid"
-                      />
+                     <img
+                     src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
+                     alt=""
+                     className="img-fluid mx-auto d-block"
+                     style={{ Height: "300px", Width: "300px" }}
+                   />
                     )}
-                  </div>
+                    
+              
                 </div>
               </div>
             </div>
