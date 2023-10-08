@@ -27,8 +27,8 @@ function NavbarPage() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/social/feed" className="nav-link">
-                <i className="fas fa-list"></i> Timeline
+              <NavLink to={`perfil/${user._id}`} className="nav-link">
+                <i className="fas fa-list"></i> Perfil
               </NavLink>
             </li>
             <li className="nav-item">
@@ -62,11 +62,13 @@ function NavbarPage() {
                 )}
               </NavLink>
             </li>
-            <li className="nav-item">
-                <p className="mt-2">
+            <li className="nav-item"> 
+            <NavLink to={`perfil/${user._id}`} className="nav-link">
+
                   {user.name}
                   {user.surname}
-                </p>
+                
+              </NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/social/settings" className="nav-link">

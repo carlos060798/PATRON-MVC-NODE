@@ -1,235 +1,139 @@
-import { useEffect, useState } from "react";
 import avatar from "../../assets/img/user.png";
-import getPerfil from "../../helpers/getPerfil";
-import { Await, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import usePerfil from "../../hooks/usePerfil";
+import formatearFecha from "../../helpers/formatofecha";
 
 function PerfilPage() {
   const { user } = useAuth();
-  const [User, setUser] = useState({});
-  const [counters, setCounters] = useState({
-    following: "",
-    followed: "",
-    publications: "",
-  });
-  const [publics, setPublics] = useState([]);
-  const [page, setPage] = useState(1);
-  const { userId } = useParams();
-  useEffect(() => {
-    getPerfil(userId, setUser);
-    getCounters();
-    getPublications();
-  }, []);
-
-  useEffect(() => {
-    getPerfil(userId, setUser);
-    getPublications();
-  }, [userId]);
-
-  const getCounters = async () => {
-    let token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    };
-    const request = await axios.get(
-      `http://localhost:4100/api/users/counter/${userId}`,
-      config
-    );
-    const { data, status } = request;
-    const { following, followed, publications } = data;
-    setCounters({ following, followed, publications });
-  };
-  const getPublications = async (nextPage = 1) => {
-    try {
-      let token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      };
-  
-      const request = await axios.get(
-        `http://localhost:4100/api/public/user/${userId}/${nextPage}`,
-        config
-      );
-  
-      const { data, status } = request;
-      if (status === 200) {
-        // Siempre cargar solo las publicaciones de la página actual
-        setPublics(data.publications);
-      }
-    } catch (error) {
-      console.error("Error al obtener las publicaciones:", error);
-      // Manejar el error y proporcionar retroalimentación al usuario si es necesario.
-    }
-   /* let token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    };
-    const request = await axios.get(
-      `http://localhost:4100/api/public/user/${userId}/${nextPage}`,
-      config
-    );
-
-    const { data, status } = request;
-    const { publications } = data;
-    console.log(publications);
-    setPublics(publications);
-    if (status == 200) {
-      let newPublications= publications;
-
-      if(publics.length >= 1){
-        newPublications = [...publics, ...newPublications];
-      }
-      setPublics(newPublications);
-
-    }*/
-  };
-  const newPage = () => {
-     let pagenext= page + 1;
-    setPage(pagenext);
-    getPublications(pagenext);
-  }
-
-  const deletePublication = async (id) => {
-    try {
-      let token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      };
-  
-      // Hacer la solicitud DELETE para eliminar la publicación
-      await axios.delete(`http://localhost:4100/api/public/delete/${id}`, config);
-  
-      // Después de eliminar la publicación, cargar las nuevas publicaciones y actualizar los contadores
-      getPublications();
-      getCounters();
-    } catch (error) {
-      console.error("Error al eliminar la publicación:", error);
-      // Manejar el error y proporcionar retroalimentación al usuario si es necesario.
-    }
-    };
-
-
+  const {
+    User,
+    counters,
+    publics,
+    page,
+    newPage,
+    deletePublication,
+  } = usePerfil();
   return (
-    <>
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-3">
-            {User.image !== "image.png" ? (
-              <img
-                className="img-fluid rounded-circle mb-3"
-                style={{ width: "150px", height: "150px" }}
-                src={`http://localhost:4100/api/users/avatar/${User.image}`}
-                alt="Avatar"
-              />
-            ) : (
-              <img
-                src={avatar}
-                alt="Avatar"
-                className="img-fluid rounded-circle mb-3"
-                style={{ width: "150px", height: "150px" }}
-              />
-            )}
-          </div>
-          <div className="col-md-9">
-            <h2>
-              {" "}
-              <Link to={`perfil/${User._id}`} className="text-muted">
-                {User.name} {User.surname}
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-md-3">
+          {User.image !== "image.png" ? (
+            <img
+              className="img-fluid rounded-circle mb-3"
+              style={{ width: "150px", height: "150px" }}
+              src={`http://localhost:4100/api/users/avatar/${User.image}`}
+              alt="Avatar"
+            />
+          ) : (
+            <img
+              src={avatar}
+              alt="Avatar"
+              className="img-fluid rounded-circle mb-3"
+              style={{ width: "150px", height: "150px" }}
+            />
+          )}
+        </div>
+        <div className="col-md-9">
+          <h2 className="mb-0 text-primary fw-semibold">
+            {User.name} {User.surname}
+          </h2>
+          <p className="text-muted">@{User.nick}</p>
+
+          <p className="mb-3">{User.bio}</p>
+          <div className="row">
+            <div className="col-md-4">
+              <Link
+                to={`/social/siguindo/${User._id}`}
+                className="text-decoration-none text-primary"
+              >
+                <strong className="d-block mb-1">
+                  Seguidores:{" "}
+                  <span className="text-center">{counters.following}</span>
+                </strong>
               </Link>
-            </h2>
-            <p className="text-muted">@{user.nick}</p>
+            </div>
 
-            <p>{User.bio}</p>
-            <div className="row">
-              <div className="col-md-4">
-                <Link to={`/social/siguindo/${User._id}`}>
-                  <strong>Seguidores</strong>
-                  <br /> {counters.following}{" "}
-                </Link>
-              </div>
-
-              <div className="col-md-4">
-                <Link to={`/social/segidores/${User._id}`}>
-                  <strong>Seguidos</strong>
-                  <br /> {counters.followed}
-                </Link>
-              </div>
-              <div className="col-md-4">
-                <Link>
-                  <strong>Publicaciones</strong>
-                  <br />
-                  {counters.publications}
-                </Link>
-              </div>
+            <div className="col-md-4">
+              <Link
+                to={`/social/segidores/${User._id}`}
+                className="text-decoration-none text-primary"
+              >
+                <strong className="d-block mb-1">
+                  Seguidos:{" "}
+                  <span className="text-center">{counters.followed}</span>
+                </strong>
+              </Link>
+            </div>
+            <div className="col-md-4">
+              <Link className="text-decoration-none text-primary text-center">
+                <strong className="d-block mb-1">
+                  Publicaciones:{" "}
+                  <span className="text-center">{counters.publications}</span>
+                </strong>
+              </Link>
             </div>
           </div>
         </div>
-        <div className="row">
-          <h1>GENTE</h1>
-          {publics.map(
-            (publicacion) => (
-              console.log(publicacion),
-              (
-                <div className="card mb-3 d-flex p-4" key={publicacion._id}>
-                  <div className="d-flex align-items-center mr-3">
-                    <img
-                      src={avatar}
-                      className="rounded-circle mx-2"
-                      alt="Imagen de Usuario"
-                      width="64"
-                      height="64"
-                    />
-                    <p className="text-muted mt-4 mx-1">
-                      {publicacion.created_at}
-                    </p>
-                  </div>
-                  <div className="d-flex flex-column w-100">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h5 className="mt-0">
-                          {publicacion.user.name}
-                          {publicacion.user.surname}
-                        </h5>
-                        <p>{publicacion.text}</p> 
-                       {publicacion.file && <img src={ `http://localhost:4100/api/public/publication/${publicacion.file}`} alt="" /> }
-                      </div>
-                      <div className="d-flex">
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm mx-2"
-                          onClick={()=>deletePublication(publicacion._id)}
-                        >
-                          <i className="fas fa-trash-alt"></i> Eliminar
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            )
-          )}
-          <div className="d-flex justify-content-center mt-3">
-            <button type="button" className="btn btn-primary" onClick={newPage}>
-              Ver más publicaciones
-            </button>
-          </div>
+      </div>
+      <div className="row">
+        <div className="col-md-12 mt-3">
+          <h1 className="text-center fw-bolder">Mis Publicaciones</h1>
         </div>
       </div>
-    </>
+      {publics.map((publicacion) => (
+        <div className="row" key={publicacion._id}>
+          <div className="col-md-3">
+            <img
+              src={avatar}
+              className="rounded-circle mb-3"
+              alt="Imagen de Usuario"
+              width="64"
+              height="64"
+            />
+            <p className="text-muted mt-4">
+              {formatearFecha(publicacion.created_at)}
+            </p>
+          </div>
+          <div className="col-md-9">
+          <div className="card mb-3">
+  <div className="card-body d-flex flex-column ">
+    <h5 className="card-title">
+      {publicacion.user.name} {publicacion.user.surname}
+    </h5>
+    <p className="card-text">{publicacion.text}</p>
+ 
+    <div className="d-flex justify-content-center align-items-center" >
+  {publicacion.file && (
+    <img
+      src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
+      alt=""
+      className="img-fluid"
+      style={{ Width: '350px', Height: '350px', objectFit: 'cover' }}
+    />
+  )}
+</div>
+    <button
+      type="button"
+      className="btn btn-danger btn-sm mt-auto align-self-end"
+      onClick={() => deletePublication(publicacion._id)}
+    >
+      <i className="fas fa-trash-alt"></i> Eliminar
+    </button>
+  </div>
+</div>
+
+          </div>
+        </div>
+      ))}
+      <div className="row text-center my-5">
+        <div className="col-md-12 mt-3 text-center">
+          <button type="button" className="btn btn-primary" onClick={newPage}>
+            Ver más publicaciones
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
