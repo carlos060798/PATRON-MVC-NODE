@@ -1,22 +1,20 @@
-import React from "react";
 import usePublication from "../../hooks/usePublication";
 import avatar from "../../assets/img/user.png";
 
 function FeedPage() {
-  const {
-    formData,
-    handleChange,
-    CreatePublication,
-    alert,
-    publics,
-    newPage,
-    loading,
-  } = usePublication();
-
-  return (
-    <div className="container mt-4">
-      <div className="row">
-        <div className="card">
+const{
+  formData,
+  handleChange,
+  CreatePublication,
+  alert,
+  publics,
+  newPage,
+}=usePublication();
+return (
+  <div className="container mt-4">
+    <div className="col">
+      <div className="row justify-content-center align-items-center">
+        <div className="card col-lg-7 col-md-10 col-12">
           <div className="card-body">
             <form id="publicationform" onSubmit={CreatePublication}>
               <div className="mb-3">
@@ -38,15 +36,14 @@ function FeedPage() {
                   id="file"
                   className="form-control"
                   name="file0"
-                  value={formData.file0}
                   onChange={handleChange}
                 />
               </div>
               <button type="submit" className="btn btn-primary">
-                Publicar
+                <i className="fas fa-pen"></i> Publicar
               </button>
             </form>
-            {loading && <div className="loading-indicator">Cargando...</div>}
+           
             {alert.type === "success" && (
               <div className="alert alert-success mt-4" role="alert">
                 {alert.message}
@@ -60,47 +57,47 @@ function FeedPage() {
           </div>
         </div>
       </div>
-      <div className="row">
-        <h1>Publicaciones</h1>
-        {publics.map((publicacion) => (
-          <div className="card mb-3 d-flex p-4" key={publicacion._id}>
-            <div className="d-flex align-items-center mr-3">
-              <img
-                src={avatar}
-                className="rounded-circle mx-2"
-                alt="Imagen de Usuario"
-                width="64"
-                height="64"
-              />
-              <p className="text-muted mt-4 mx-1">{publicacion.created_at}</p>
-            </div>
-            <div className="d-flex flex-column w-100">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <h5 className="mt-0">
-                    {publicacion.user.name} {publicacion.user.surname}
-                  </h5>
-                  <p>{publicacion.text}</p>
-                  {publicacion.file && (
-                    <img
-                      src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
-                      alt=""
-                    />
-                  )}
+      <div className="row mt-4 justify-content-center">
+        <div className="col-lg-7 col-md-10 col-12">
+          <h1>Publicaciones</h1>
+          {publics.map((publicacion) => (
+            <div className="card mb-3" key={publicacion._id}>
+              <div className="card-body">
+                <div className="d-flex align-items-center">
+                  <img
+                    src={avatar}
+                    className="rounded-circle mr-3"
+                    alt="Imagen de Usuario"
+                    width="64"
+                    height="64"
+                  />
+                  <div>
+                    <h5 className="mt-0">
+                      {publicacion.user.name} {publicacion.user.surname}
+                    </h5>
+                    <p>{publicacion.text}</p>
+                    {publicacion.file && (
+                      <img
+                        src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
+                        alt=""
+                        className="img-fluid"
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="d-flex"></div>
               </div>
             </div>
+          ))}
+          <div className="text-center">
+            <button type="button" className="btn btn-primary" onClick={newPage}>
+              Ver más publicaciones
+            </button>
           </div>
-        ))}
-        <div className="d-flex justify-content-center mt-3">
-          <button type="button" className="btn btn-primary" onClick={newPage}>
-            Ver más publicaciones
-          </button>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default FeedPage;

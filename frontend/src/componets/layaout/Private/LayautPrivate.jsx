@@ -25,9 +25,9 @@ function LayautPrivate() {
           <div className="row">
             {user._id ? (
               <>
-                <div className="col-md-7">
+                
                   <Outlet />
-                </div>
+               
               </>
             ) : (
               <Navigate to="/login" />
