@@ -12,6 +12,7 @@ function PerfilPage() {
     publics,
     page,
     newPage,
+    lastPage,
     deletePublication,
   } = usePerfil();
   return (
@@ -128,8 +129,12 @@ function PerfilPage() {
       ))}
       <div className="row text-center my-5">
         <div className="col-md-12 mt-3 text-center">
-          <button type="button" className="btn btn-primary" onClick={newPage}>
-            Ver más publicaciones
+          <button type="button" className="btn btn-primary" onClick={lastPage}>
+          <i className="fas fa-arrow-left"></i>
+
+          </button> 
+          <button type="button" className="btn btn-primary mx-2" onClick={newPage}>
+          <i className="fas fa-arrow-right"></i>
           </button>
         </div>
       </div>

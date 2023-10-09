@@ -96,6 +96,11 @@ function usePerfil() {
       getPublications(pagenext);
     }
   
+    const lastPage = () => {
+      let pagenext= page - 1;
+     setPage(pagenext);
+     getPublications(pagenext);
+   }
     const deletePublication = async (id) => {
       try {
         let token = localStorage.getItem("token");
@@ -125,6 +130,7 @@ function usePerfil() {
     page,
     newPage,
     deletePublication,
+    lastPage,
  }
 }
 
