@@ -1,54 +1,58 @@
-import React from "react";
 import avatar from "../../assets/img/USER.png";
 import useUser from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
-
+import { uid as index } from "uid";
+import formatearFecha from "../../helpers/formatofecha";
 function PeoplePage() {
   const { user } = useAuth();
-  const { users, nextPage, following,handleDislike,handleLike } = useUser();
-
+  const { users, nextPage, following, handleDislike, handleLike } = useUser();
+  
   return (
     <div className="container mt-4">
-      <h1>GENTE</h1>
-      {users.map((USER) => (
-        <div className="card mb-3 d-flex p-4" key={USER._id}>
-          <div className="d-flex align-items-center mr-3">
-            {USER.image !== "image.png" ? (
-              <img
-                className="img-thumbnail mb-3"
-                style={{ width: "34px", height: "34px" }}
-                src={`http://localhost:4100/api/users/avatar/${USER.image}`}
-                alt="Avatar"
-              />
-            ) : (
-              <img
-                src={avatar}
-                alt="Avatar"
-                className="img-thumbnail mb-3"
-                style={{ width: "34px", height: "34px" }}
-              />
-            )}
-            <Link to={`/social/perfil/${USER._id}`} className="mt-4">
-              <p> {USER.name} {USER.surname}</p>
-            </Link>
-            <p className="text-muted mt-4 mx-1">{USER.create_at}</p>
-          </div>
-          <div className="d-flex flex-column w-100">
-            <div className="d-flex justify-content-between align-items-center">
-              <div>
-                <p>{USER.bio}</p>
-              </div>
-              <div className="d-flex">
+      <h1 className="text-center bg-light text-dark fw-bold my-4">GENTE</h1>
+      <div className="row">
+        {users.map((USER) => (
+          <div className="col-md-6 mb-4" key={index()}>
+            <div className="card">
+              <div className="card-body d-flex align-items-center">
+                {USER.image !== "image.png" ? (
+                  <img
+                    className="img-thumbnail mr-3"
+                    style={{ width: "34px", height: "34px" }}
+                    src={`http://localhost:4100/api/users/avatar/${USER.image}`}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <img
+                    src={avatar}
+                    alt="Avatar"
+                    className="img-thumbnail mr-3"
+                    style={{ width: "34px", height: "34px" }}
+                  />
+                )}
+                <div>
+                  <Link
+                    to={`/social/perfil/${USER._id}`}
+                    className="text-decoration-none"
+                  >
+                    <h5 className="card-title mb-1">
+                      {USER.name} {USER.surname}
+                    </h5>
+                  </Link>
+                  <p className="text-muted mb-1">
+                    {formatearFecha(USER.create_at)}
+                  </p>
+                </div>
                 {USER._id !== user._id && (
-                  <>
+                  <div className="d-flex justify-content-between mx-2">
                     {!following.includes(USER._id) ? (
                       <button
                         type="button"
-                        className="btn btn-primary btn-sm mx-2"
+                        className="btn btn-primary btn-sm"
                         onClick={() => handleLike(USER._id)}
                       >
-                        <i className="fas fa-thumbs-up"></i> Like
+                        <i className="fas fa-thumbs-up"></i>
                       </button>
                     ) : (
                       <button
@@ -56,17 +60,20 @@ function PeoplePage() {
                         className="btn btn-danger btn-sm"
                         onClick={() => handleDislike(USER._id)}
                       >
-                        <i className="fas fa-thumbs-down"></i> Dislike
+                        <i className="fas fa-thumbs-down"></i>
                       </button>
                     )}
-                  </>
+                  </div>
                 )}
+              </div>
+              <div className="card-body">
+                <p className="card-text">{USER.bio}</p>
               </div>
             </div>
           </div>
-        </div>
-      ))}
-      <div className="d-flex justify-content-center mt-3">
+        ))}
+      </div>
+      <div className="d-flex justify-content-center my-3">
         <button type="button" className="btn btn-primary" onClick={nextPage}>
           Ver más personas
         </button>
@@ -76,85 +83,3 @@ function PeoplePage() {
 }
 
 export default PeoplePage;
-
-
-
-/*import React, { useState } from "react";
-import avatar from "../../assets/img/USER.png";
-import useUser from "../../hooks/useUser";
-import useAuth from "../../hooks/useAuth";
-
-function PeoplePage() {
- const {user}=useAuth()
-  const { users, nextPage, following,handleLike,
-    handleDislike
-    } = useUser();
-
-  return (
-    <>
-      <div className="container mt-4">
-        <h1>GENTE</h1>
-        {users.map((USER) => (
-          <div className="card mb-3 d-flex p-4" key={USER._id}>
-            <div className="d-flex align-items-center mr-3">
-              {USER.image !== "image.png" ? (
-                <img
-                  className="img-thumbnail mb-3"
-                  style={{ width: "34px", height: "34px" }}
-                  src={`http://localhost:4100/api/USERs/avatar/${USER.image}`}
-                  alt="Avatar"
-                />
-              ) : (
-                <img
-                  src={avatar}
-                  alt="Avatar"
-                  className="img-thumbnail mb-3"
-                  style={{ width: "34px", height: "34px" }}
-                />
-              )}
-              <h5 className="mt-4">
-                {USER.name}
-                {USER.surname}
-              </h5>
-              <p className="text-muted mt-4 mx-1">{USER.create_at}</p>
-            </div>
-            <div className="d-flex flex-column w-100">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <p>{USER.bio}</p>
-                </div>
-                <div className="d-flex">
-                 { USER._id != user._id 
-                  {!following.includes(USER._id) ? (
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm mx-2"
-                        onClick={() => handleLike(USER._id)}
-                    >
-                      <i className="fas fa-thumbs-up"></i> Like
-                    </button>
-                  ) : (
-                    <button type="button" className="btn btn-danger btn-sm"
-                     onClick={()=> handleDislike(USER._id) } >
-                      <i className="fas fa-thumbs-down"></i> Dislike
-                    </button>
-                  )}
-}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-        <div className="d-flex justify-content-center mt-3">
-          <button type="button" className="btn btn-primary" onClick={nextPage}>
-            Ver más personas
-          </button>
-        </div>
-      </div>
-    
-    </>
-  );
-}
-
-export default PeoplePage;
-*/
