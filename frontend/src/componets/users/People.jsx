@@ -10,7 +10,7 @@ function PeoplePage() {
   
   return (
     <div className="container mt-4">
-      <h1 className="text-center bg-light text-dark fw-bold my-4">GENTE</h1>
+       <h1 className="text-center mb-4 display-4 fw-bold text-primary">Usuarios de clon de x</h1>
       <div className="row">
         {users.map((USER) => (
           <div className="col-md-6 mb-4" key={index()}>

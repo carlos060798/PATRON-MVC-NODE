@@ -80,7 +80,7 @@ function PerfilPage() {
       <div className="row">
         <div className="col-md-12 mt-3">
           <h1 className="text-center mb-4 display-4 fw-bold text-primary">
-            Publicaciones de {User.name} ({User.nick})
+            Publicaciones de {User.name} {User.nick}
           </h1>
         </div>
       </div>
