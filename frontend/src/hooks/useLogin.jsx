@@ -11,10 +11,10 @@ const useLogin = () => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: value,                          
     }));
   };
-  const handleLogin = async (e) => {
+ /* const handleLogin = async (e) => {
     e.preventDefault();
     let userData = FormData;
     // Validar que no falten campos
@@ -50,8 +50,51 @@ const useLogin = () => {
         error: true,
       });
     }
+  }; */
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    let userData = FormData;
+  
+    // Validar que no falten campos
+    if ([FormData.email, FormData.password].includes("")) {
+      setAlerta({
+        msg: "Todos los campos son obligatorios",
+        error: true,
+      });
+      return;
+    }
+  
+    // Enviar los datos al backend
+    try {
+      const res = await axios.post(
+        "http://localhost:4100/api/users/login",
+        userData
+      );
+      const { data } = res;
+  
+      // Guardar token en el localstorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.userexist));
+  
+      // Mostrar alerta de éxito
+      setAlerta({
+        msg: "Usuario logeado correctamente",
+        error: false,
+      });
+  
+      // Redireccionar al usuario después de 5 segundos
+      setTimeout(() => {
+        window.location.href = "/social";
+      }, 5000);
+    } catch (error) {
+      console.log(error);
+      // Mostrar alerta de error
+      setAlerta({
+        msg: "Usuario o contraseña incorrectos",
+        error: true,
+      });
+    }
   };
-
   return {
     handleChange,
     FormData,

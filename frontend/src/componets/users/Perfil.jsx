@@ -39,9 +39,9 @@ function PerfilPage() {
           <h2 className="mb-0 text-primary fw-semibold">
             {User.name} {User.surname}
           </h2>
-          <p className="text-muted">@{User.nick}</p>
+          <p className="text-primary">@{User.nick}</p>
 
-          <p className="mb-3">{User.bio}</p>
+          <p className="mb-3 text-primary">{User.bio}</p>
           <div className="row">
             <div className="col-md-4">
               <Link
@@ -49,7 +49,7 @@ function PerfilPage() {
                 className="text-decoration-none text-primary"
               >
                 <strong className="d-block mb-1">
-                Seguidos:{" "}
+                  Seguidos:{" "}
                   <span className="text-center">{counters.following}</span>
                 </strong>
               </Link>
@@ -61,8 +61,7 @@ function PerfilPage() {
                 className="text-decoration-none text-primary"
               >
                 <strong className="d-block mb-1">
-                Seguidores:{" "}
-
+                  Seguidores:{" "}
                   <span className="text-center">{counters.followed}</span>
                 </strong>
               </Link>
@@ -80,7 +79,9 @@ function PerfilPage() {
       </div>
       <div className="row">
         <div className="col-md-12 mt-3">
-          <h1 className="text-center text-bg-primary fw-bolder">Mis Publicaciones</h1>
+          <h1 className="text-center mb-4 display-4 fw-bold text-primary">
+            Publicaciones de {User.name} ({User.nick})
+          </h1>
         </div>
       </div>
       {publics.map((publicacion) => (
@@ -105,13 +106,17 @@ function PerfilPage() {
                 </h5>
                 <p className="card-text">{publicacion.text}</p>
 
-                <div className="d-flex justify-content-center align-items-center" >
+                <div className="d-flex justify-content-center align-items-center">
                   {publicacion.file && (
                     <img
                       src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
                       alt=""
                       className="img-fluid"
-                      style={{ Width: '350px', Height: '350px', objectFit: 'cover' }}
+                      style={{
+                        Width: "350px",
+                        Height: "350px",
+                        objectFit: "cover",
+                      }}
                     />
                   )}
                 </div>
@@ -124,7 +129,6 @@ function PerfilPage() {
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       ))}
@@ -132,9 +136,12 @@ function PerfilPage() {
         <div className="col-md-12 mt-3 text-center">
           <button type="button" className="btn btn-primary" onClick={lastPage}>
             <i className="fas fa-arrow-left"></i>
-
           </button>
-          <button type="button" className="btn btn-primary mx-2" onClick={newPage}>
+          <button
+            type="button"
+            className="btn btn-primary mx-2"
+            onClick={newPage}
+          >
             <i className="fas fa-arrow-right"></i>
           </button>
         </div>

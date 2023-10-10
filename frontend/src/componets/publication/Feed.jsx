@@ -1,15 +1,27 @@
 import usePublication from "../../hooks/usePublication";
 import avatar from "../../assets/img/user.png";
 import formatearFecha from "../../helpers/formatofecha";
-import {uid as unicode} from 'uid'
+import { uid as unicode } from "uid";
 
 function FeedPage() {
-  const { formData, handleChange, CreatePublication, alert, publics, newPage,hasMorePublications } =
-    usePublication();
-    console.log(hasMorePublications)
+  const {
+    formData,
+    handleChange,
+    CreatePublication,
+    alert,
+    publics,
+    newPage,
+    hasMorePublications,
+  } = usePublication();
+  console.log(hasMorePublications);
   return (
     <div className="container mt-4">
-      <h1 className="text-center fw-bold text-dark">Publicaciones</h1>
+    <h1 className="text-center mb-4 display-4 fw-bold text-primary">
+    Publicaciones de los Usuarios 
+
+</h1>
+  
+
       <div className="col">
         <div className="row justify-content-center align-items-center">
           <div className="card col-lg-7 col-md-10 col-12">
@@ -43,12 +55,12 @@ function FeedPage() {
               </form>
 
               {alert.type === "success" && (
-                <div className="alert alert-success mt-4" role="alert">
+                <div className="alert alert-success mt-4 text-center" role="alert">
                   {alert.message}
                 </div>
               )}
               {alert.type === "error" && (
-                <div className="alert alert-danger mt-4" role="alert">
+                <div className="alert alert-danger mt-4 text-center" role="alert">
                   {alert.message}
                 </div>
               )}
@@ -93,15 +105,11 @@ function FeedPage() {
             ))}
             {hasMorePublications && (
               <div className="d-flex justify-content-center">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => newPage()}
-                >
+                <button className="btn btn-primary" onClick={() => newPage()}>
                   Ver más publicaciones
                 </button>
               </div>
             )}
-             
           </div>
         </div>
       </div>
