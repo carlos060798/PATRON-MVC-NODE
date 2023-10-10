@@ -45,7 +45,7 @@ const createFollow = async (req, res) => {
 };
 
 // Lista usuarios seguidos por cualquier usuario
-const getFollowing = async (req, res) => {
+/*const getFollowing = async (req, res) => {
     try {
         // Obtener el ID del usuario actual
         let userId = req.user.id;
@@ -102,8 +102,51 @@ const getFollowing = async (req, res) => {
         res.status(500).json({ message: "Error en el servidor", error });
     }
 };
+*/
+const getFollowing = async (req, res) => {
+    try {
+        // Obtener el ID del usuario actual
+        let userId = req.user.id;
 
+        // Comprobar si llega un ID de usuario diferente por la URL
+        if (req.params.id) userId = req.params.id;
+
+        // Configuración de la población sin límite de paginación
+        const options = {
+            populate: [
+                {
+                    path: 'user',
+                    select: '-password -role -__v -email'
+                },
+                {
+                    path: 'followed',
+                    select: '-password -role -__v -email'
+                }
+            ]
+        };
+
+        // Obtener la lista completa de usuarios seguidos por el usuario con ID 'userId'
+        const followings = await Follow.find({ user: userId }).populate(options.populate);
+
+        // Obtener la lista de IDs de usuarios seguidos y seguidores
+        let user_followings = followUserIds(req.user.id);
+
+        // Responder con los resultados
+        res.json({
+            message: 'Usuarios seguidos',
+            totalUsers: followings.length,
+            users: followings,
+            followings: (await user_followings).following,
+            followingsme: (await user_followings).followers
+        });
+    } catch (error) {
+        // Manejar errores del servidor
+        console.error(error);
+        res.status(500).json({ message: 'Error en el servidor', error });
+    }
+};
 // Lista usuarios que siguen a cualquier usuario
+/*
 const getFollowers = async (req, res) => {
     try {
         // Obtener el ID del usuario actual
@@ -151,6 +194,50 @@ const getFollowers = async (req, res) => {
             totalPages: followings.totalPages,
             currentPage: followings.page,
             users: followings.users,
+            userfollowings: (await user_followings).following,
+            userfollowingsme: (await user_followings).followers
+        });
+
+    } catch (error) {
+        // Manejar errores del servidor
+        console.error(error);
+        res.status(500).json({ message: "Error en el servidor", error });
+    }
+};
+*/
+const getFollowers = async (req, res) => {
+    try {
+        // Obtener el ID del usuario actual
+        let userId = req.user.id;
+
+        // Comprobar si llega un ID de usuario diferente por la URL
+        if (req.params.id) userId = req.params.id;
+
+        // Configuración de la población sin límite de paginación
+        const options = {
+            populate: [
+                {
+                    path: 'user',
+                    select: '-password -role -__v -email'
+                },
+                {
+                    path: 'followed',
+                    select: '-password -role -__v -email'
+                }
+            ]
+        };
+
+        // Obtener la lista completa de usuarios que siguen al usuario con ID 'userId'
+        const followings = await Follow.find({ followed: userId }).populate(options.populate);
+
+        // Obtener la lista de IDs de usuarios que sigues y te siguen
+        const user_followings = followUserIds(req.user.id);
+
+        // Responder con los resultados
+        res.json({
+            message: "Usuarios que me siguen",
+            totalUsers: followings.length,
+            users: followings,
             userfollowings: (await user_followings).following,
             userfollowingsme: (await user_followings).followers
         });

@@ -14,7 +14,7 @@ function useFollowing() {
         getfollowers(page);
         getPerfil(userId,setPerfil);
 
-    }, [page, userId]);
+    }, [userId]);
 
     const getfollowers = async (pageid) => {
         try {
@@ -27,7 +27,7 @@ function useFollowing() {
             };
 
             const response = await axios.get(
-                `http://localhost:4100/api/follow/followers/${userId}/${pageid}`,
+                `http://localhost:4100/api/follow/followers/${userId}`,
                 config
             );
               console.log(response.data.followings);
@@ -50,12 +50,6 @@ function useFollowing() {
             // Manejar errores de la solicitud HTTP aquí
             console.error("Error fetching data: ", error);
         }
-    };
-
-    const nextPage = () => {
-        const nextPageNumber = page + 1;
-        setPage(nextPageNumber);
-        getfollowers(nextPageNumber);
     };
 
     const handleLike = async (userId) => {
@@ -114,7 +108,6 @@ function useFollowing() {
     return {
         users,
         following,
-        nextPage,
         handleLike,
         handleDislike,
         Perfil

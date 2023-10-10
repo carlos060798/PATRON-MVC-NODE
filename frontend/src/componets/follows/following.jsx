@@ -6,13 +6,12 @@ function FollowingPage() {
   const {
     users,
     following,
-    nextPage,
     handleLike,
     handleDislike,
     Perfil
   } = useFollowing();
   const { user } = useAuth();
-
+   console.log(users);
   return ( 
     <div className="container mt-5">
       <h1 className="text-center mb-4">Usuarios que sigue {Perfil.name} {Perfil.nick}</h1>
@@ -63,11 +62,7 @@ function FollowingPage() {
           )}
         </div>
       ))}
-      <div className="text-center my2">
-          <button type="button" className="btn btn-primary" onClick={nextPage}>
-          Ver más personas
-        </button>
-         </div>
+      
     </div>
   );
 }

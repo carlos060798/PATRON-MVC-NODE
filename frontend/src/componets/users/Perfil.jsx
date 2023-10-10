@@ -49,7 +49,7 @@ function PerfilPage() {
                 className="text-decoration-none text-primary"
               >
                 <strong className="d-block mb-1">
-                  Seguidores:{" "}
+                Seguidos:{" "}
                   <span className="text-center">{counters.following}</span>
                 </strong>
               </Link>
@@ -61,7 +61,8 @@ function PerfilPage() {
                 className="text-decoration-none text-primary"
               >
                 <strong className="d-block mb-1">
-                  Seguidos:{" "}
+                Seguidores:{" "}
+
                   <span className="text-center">{counters.followed}</span>
                 </strong>
               </Link>
@@ -97,32 +98,32 @@ function PerfilPage() {
             </p>
           </div>
           <div className="col-md-9">
-          <div className="card mb-3">
-  <div className="card-body d-flex flex-column ">
-    <h5 className="card-title">
-      {publicacion.user.name} {publicacion.user.surname}
-    </h5>
-    <p className="card-text">{publicacion.text}</p>
- 
-    <div className="d-flex justify-content-center align-items-center" >
-  {publicacion.file && (
-    <img
-      src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
-      alt=""
-      className="img-fluid"
-      style={{ Width: '350px', Height: '350px', objectFit: 'cover' }}
-    />
-  )}
-</div>
-    <button
-      type="button"
-      className="btn btn-danger btn-sm mt-auto align-self-end"
-      onClick={() => deletePublication(publicacion._id)}
-    >
-      <i className="fas fa-trash-alt"></i> Eliminar
-    </button>
-  </div>
-</div>
+            <div className="card mb-3">
+              <div className="card-body d-flex flex-column ">
+                <h5 className="card-title">
+                  {publicacion.user.name} {publicacion.user.surname}
+                </h5>
+                <p className="card-text">{publicacion.text}</p>
+
+                <div className="d-flex justify-content-center align-items-center" >
+                  {publicacion.file && (
+                    <img
+                      src={`http://localhost:4100/api/public/publication/${publicacion.file}`}
+                      alt=""
+                      className="img-fluid"
+                      style={{ Width: '350px', Height: '350px', objectFit: 'cover' }}
+                    />
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm mt-auto align-self-end"
+                  onClick={() => deletePublication(publicacion._id)}
+                >
+                  <i className="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -130,11 +131,11 @@ function PerfilPage() {
       <div className="row text-center my-5">
         <div className="col-md-12 mt-3 text-center">
           <button type="button" className="btn btn-primary" onClick={lastPage}>
-          <i className="fas fa-arrow-left"></i>
+            <i className="fas fa-arrow-left"></i>
 
-          </button> 
+          </button>
           <button type="button" className="btn btn-primary mx-2" onClick={newPage}>
-          <i className="fas fa-arrow-right"></i>
+            <i className="fas fa-arrow-right"></i>
           </button>
         </div>
       </div>

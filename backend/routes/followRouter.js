@@ -5,10 +5,10 @@ import auth from '../middlewares/auth.js';
 const router = Router();
 
 // Ruta para obtener la lista de usuarios seguidos por un usuario (opcionalmente por ID y página)
-router.get('/following/:id?/:page?', auth, getFollowing);
+router.get('/following/:id', auth, getFollowing);
 
 // Ruta para obtener la lista de usuarios que siguen a un usuario (opcionalmente por ID y página)
-router.get('/followers/:id?/:page?', auth, getFollowers);
+router.get('/followers/:id', auth, getFollowers);
 
 // Ruta para crear un nuevo seguimiento (follow)
 router.post('/save',auth ,createFollow);

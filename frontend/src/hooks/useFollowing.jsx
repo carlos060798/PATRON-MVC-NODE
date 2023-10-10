@@ -13,7 +13,7 @@ function useFollowing() {
     useEffect(() => {
         getFollowing(page);
         getPerfil(userId,setPerfil);
-    }, []);
+    }, [userId]);
 
     const getFollowing = async (pageid) => {
         try {
@@ -26,7 +26,7 @@ function useFollowing() {
             };
 
             const response = await axios.get(
-                `http://localhost:4100/api/follow/following/${userId}/${pageid}`,
+                `http://localhost:4100/api/follow/following/${userId}`,
                 config
             );
               console.log(response.data.followings);
@@ -34,7 +34,7 @@ function useFollowing() {
             let cleanUsers=[]
             response.data.users.forEach(user => 
               cleanUsers= [...cleanUsers, user.followed]);
-            
+              console.log(data.users);
             data.users=cleanUsers;
 
             if (status === 200) {
@@ -51,11 +51,7 @@ function useFollowing() {
         }
     };
 
-    const nextPage = () => {
-        const nextPageNumber = page + 1;
-        setPage(nextPageNumber);
-        getFollowing(nextPageNumber);
-    };
+  
 
     const handleLike = async (userId) => {
         const token = localStorage.getItem("token");
@@ -108,31 +104,9 @@ function useFollowing() {
         }
       };
 
-  /*   const getPerfil = async () => {
-        const token = localStorage.getItem("token");
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        };
-        const request = await axios.get(
-          `http://localhost:4100/api/users/profile/${userId}`,
-          config
-        );
-        console.log(request.data);
-        const {data, status} = request;
-        console.log(data.user);
-        if(status === 200){
-          setPerfil(data.user);
-        }
-        console.log(Perfil);
-      }
-*/
     return {
         users,
         following,
-        nextPage,
         handleLike,
         handleDislike,
         Perfil

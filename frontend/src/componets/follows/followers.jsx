@@ -94,7 +94,6 @@ function FollowersPage() {
     const {
         users,
         following,
-        nextPage,
         handleLike,
         handleDislike,
         Perfil
@@ -154,11 +153,7 @@ function FollowersPage() {
                 
               </div>
           ))}
-         <div className="text-center my2">
-          <button type="button" className="btn btn-primary" onClick={nextPage}>
-          Ver más personas
-        </button>
-         </div>
+        
       </div>
   );
 }
